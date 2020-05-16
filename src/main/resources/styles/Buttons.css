@@ -1,0 +1,135 @@
+#btnFinishRegister {
+    -fx-background-color: #202020;
+    -fx-graphic: url(../images/go_finish.png);
+    -fx-alignment: CENTER;
+    -fx-border-color: gray;
+    -fx-border-radius: 4px;
+    -fx-border-width: 2px;
+}
+
+#btnFinishRegister:hover{
+    -fx-background-color: #777777;  
+}
+
+#btnFinishRegister:pressed{
+    -fx-background-color: #5F5F5F;
+}
+
+#btnPreviewRegister{
+    -fx-background-color: #202020;
+    -fx-graphic: url(../images/preview.png);
+    -fx-alignment: CENTER;
+    -fx-border-color: gray;
+    -fx-border-radius: 4px;
+    -fx-border-width: 2px;
+}
+
+#btnPreviewRegister:hover{
+    -fx-background-color: #777777;  
+}
+
+#btnPreviewRegister:pressed{
+    -fx-background-color: #5F5F5F;
+}
+
+#btnNextRegister{
+    -fx-background-color: #202020;
+    -fx-graphic: url(../images/next.png);
+    -fx-alignment: CENTER;
+    -fx-border-color: gray;
+    -fx-border-radius: 4px;
+    -fx-border-width: 2px;
+}
+
+#btnNextRegister:hover{
+    -fx-background-color: #777777;  
+}
+
+#btnNextRegister:pressed{
+    -fx-background-color: #5F5F5F;
+}
+
+#btnInitRegister{
+    -fx-background-color: #202020;
+    -fx-graphic: url(../images/go_init.png);
+    -fx-alignment: CENTER;
+    -fx-border-color: gray;
+    -fx-border-radius: 4px;
+    -fx-border-width: 2px;
+}
+
+#btnInitRegister:hover{
+    -fx-background-color: #777777;  
+}
+
+#btnInitRegister:pressed{
+    -fx-background-color: #5F5F5F;
+}
+
+#btnSearchRegister{
+    -fx-background-color: #202020;
+    -fx-graphic: url(../images/search.png);
+    -fx-alignment: CENTER;
+    -fx-border-color: gray;
+    -fx-border-radius: 4px;
+    -fx-border-width: 2px;
+}
+
+#btnSearchRegister:hover{
+    -fx-background-color: #777777;  
+}
+
+#btnSearchRegister:pressed{
+    -fx-background-color: #5F5F5F;
+}
+
+#btnAddRegister{
+    -fx-background-color: #202020;
+    -fx-graphic: url(../images/add.png);
+    -fx-alignment: CENTER;
+    -fx-border-color: gray;
+    -fx-border-radius: 4px;
+    -fx-border-width: 2px;
+}
+
+#btnAddRegister:hover{
+    -fx-background-color: #777777;  
+}
+
+#btnAddRegister:pressed{
+    -fx-background-color: #5F5F5F;
+}
+
+#btnSaveRegister{
+    -fx-background-color: #202020;
+    -fx-graphic: url(../images/save.png);
+    -fx-alignment: CENTER;
+    -fx-border-color: gray;
+    -fx-border-radius: 4px;
+    -fx-border-width: 2px;
+}
+
+#btnSaveRegister:hover{
+    -fx-background-color: #777777;  
+}
+
+#btnSaveRegister:pressed{
+    -fx-background-color: #5F5F5F;
+}
+
+#btnDeleteRegister{
+    -fx-background-color: #202020;
+    -fx-graphic: url(../images/delete.png);
+    -fx-alignment: CENTER;
+    -fx-border-color: gray;
+    -fx-border-radius: 4px;
+    -fx-border-width: 2px;
+}
+
+#btnDeleteRegister:hover{
+    -fx-background-color: #777777;  
+}
+
+#btnDeleteRegister:pressed{
+    -fx-background-color: #5F5F5F;
+}
