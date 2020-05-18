@@ -31,27 +31,27 @@
           <RowConstraints fillHeight="false" maxHeight="36.0" minHeight="36.0" prefHeight="36.0" valignment="TOP" />
         </rowConstraints>
          <children>
-            <Button fx:id="btnInitRegister" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" stylesheets="@../styles/Buttons.css" GridPane.hgrow="ALWAYS">
+            <Button fx:id="btnInitRegister" contentDisplay="RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" onAction="#clic_btnInitRegister" prefHeight="32.0" prefWidth="32.0" stylesheets="@../styles/Buttons.css" GridPane.hgrow="ALWAYS">
                <GridPane.margin>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </GridPane.margin>
             </Button>
-            <Button fx:id="btnPreviewRegister" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" stylesheets="@../styles/Buttons.css" GridPane.columnIndex="1">
+            <Button fx:id="btnPreviewRegister" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" onAction="#clic_btnPreviewRegister" prefHeight="32.0" prefWidth="32.0" stylesheets="@../styles/Buttons.css" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </GridPane.margin>
             </Button>
-            <Button fx:id="btnNextRegister" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" stylesheets="@../styles/Buttons.css" GridPane.columnIndex="2">
+            <Button fx:id="btnNextRegister" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" onAction="#clic_btnNextRegister" prefHeight="32.0" prefWidth="32.0" stylesheets="@../styles/Buttons.css" GridPane.columnIndex="2">
                <GridPane.margin>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </GridPane.margin>
             </Button>
-            <Button fx:id="btnFinishRegister" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" stylesheets="@../styles/Buttons.css" GridPane.columnIndex="3">
+            <Button fx:id="btnFinishRegister" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" onAction="#clic_btnFinishRegister" prefHeight="32.0" prefWidth="32.0" stylesheets="@../styles/Buttons.css" GridPane.columnIndex="3">
                <GridPane.margin>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </GridPane.margin>
             </Button>
-            <Button fx:id="btnAddRegister" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" stylesheets="@../styles/Buttons.css" GridPane.columnIndex="4">
+            <Button fx:id="btnAddRegister" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" onAction="#clic_btnAddRegister" prefHeight="32.0" prefWidth="32.0" stylesheets="@../styles/Buttons.css" GridPane.columnIndex="4">
                <GridPane.margin>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </GridPane.margin>
@@ -61,12 +61,12 @@
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </GridPane.margin>
             </Button>
-            <Button fx:id="btnSaveRegister" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" stylesheets="@../styles/Buttons.css" GridPane.columnIndex="5">
+            <Button fx:id="btnSaveRegister" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" onAction="#clic_btnSaveRegister" prefHeight="32.0" prefWidth="32.0" stylesheets="@../styles/Buttons.css" GridPane.columnIndex="5">
                <GridPane.margin>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </GridPane.margin>
             </Button>
-            <Button fx:id="btnDeleteRegister" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" stylesheets="@../styles/Buttons.css" GridPane.columnIndex="6">
+            <Button fx:id="btnDeleteRegister" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" onAction="#clic_btnDeleteRegister" prefHeight="32.0" prefWidth="32.0" stylesheets="@../styles/Buttons.css" GridPane.columnIndex="6">
                <GridPane.margin>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
                </GridPane.margin>
@@ -105,7 +105,7 @@
                   <Label alignment="CENTER" contentDisplay="CENTER" text="Id" textFill="WHITE" />
                   <Label alignment="CENTER" contentDisplay="CENTER" text="Marca" textFill="WHITE" GridPane.columnIndex="1" />
                   <Label alignment="CENTER" contentDisplay="CENTER" text="Abreviatura" textFill="WHITE" GridPane.columnIndex="2" />
-                  <TextField fx:id="textId" alignment="CENTER" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" GridPane.rowIndex="1">
+                  <TextField fx:id="txtId" alignment="CENTER" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="5.0" right="5.0" />
                      </GridPane.margin>
@@ -129,7 +129,7 @@
             <Insets bottom="10.0" left="10.0" right="10.0" />
          </VBox.margin>
          <children>
-            <TableView fx:id="tblMarcas" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="580.0">
+            <TableView fx:id="tblMarcas" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#clic_tblMarcas" prefWidth="580.0">
               <columns>
                 <TableColumn fx:id="colId" prefWidth="100.0" text="Id" />
                 <TableColumn fx:id="colMarca" prefWidth="350.0" text="Marcas" />
@@ -143,8 +143,8 @@
             <Insets bottom="10.0" left="10.0" right="10.0" />
          </VBox.margin>
          <children>
-            <Button fx:id="btnSearchRegister" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" stylesheets="@../styles/Buttons.css" />
-            <TextField maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="34.0" prefWidth="560.0">
+            <Button fx:id="btnSearchRegister" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" onAction="#clic_btnSearchRegister" prefHeight="32.0" prefWidth="32.0" stylesheets="@../styles/Buttons.css" />
+            <TextField fx:id="txtSearch" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="34.0" prefWidth="560.0">
                <HBox.margin>
                   <Insets left="5.0" />
                </HBox.margin></TextField>

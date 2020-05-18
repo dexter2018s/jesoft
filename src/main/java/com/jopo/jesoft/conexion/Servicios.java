@@ -1,63 +1,53 @@
 package com.jopo.jesoft.conexion;
 
 import java.sql.*;
+import java.util.logging.Logger;
 
 public class Servicios {
 
 //establecer conexion con base de datos DERBY
     public static Connection conexionAPP() throws Exception {
-        String url="jdbc:sqlserver://192.168.1.7:1433; databaseName=memeseg";
-        String user="sa";
-        String password="corel2duo";
-        return DriverManager.getConnection(
-                "jdbc:derby:c:/Onran;create=true","System","Tec01.jhh");
+        String url = "jdbc:sqlserver://192.168.1.35:1433; databaseName=memeseg";
+        String user = "sa";
+        String password = "corel2duo";
+        return DriverManager.getConnection(url, user, password);
     }
 
-    public ResultSet buscarPorCatalogo(String codigo) throws Exception {
-        String sql = "SELECT*FROM PRODUCTO WHERE codigo = " + "'" + codigo + "' OR codigo_fab = " + "'" + codigo + "'";
-        Connection cn = conexionAPP();
-        PreparedStatement pst = cn.prepareStatement(sql);
-        return pst.executeQuery();
-    }
-    
-
-    public ResultSet buscarProductos(String codigo) throws Exception {
-        String sql = "SELECT*FROM PRODUCTO WHERE codigo like " + "'%" + codigo + "%' OR codigo_fab LIKE " + "'%" + codigo + "%'";
-        System.out.println(sql);
-        Connection cn = conexionAPP();
-        PreparedStatement pst = cn.prepareStatement(sql);
-        return pst.executeQuery();
-    }
-    
-    
-    public ResultSet buscarDescripcion(String descripcion) throws Exception {
-        String sql = "SELECT*FROM PRODUCTO WHERE nombre like " + "'%" + descripcion + "%'";
-        Connection cn = conexionAPP();
-        PreparedStatement pst = cn.prepareStatement(sql);
-        return pst.executeQuery();
-    }
-    
-    public ResultSet listaProductos() throws Exception {
-        String sql = "SELECT*FROM PRODUCTO";
-        Connection cn = conexionAPP();
-        PreparedStatement pst = cn.prepareStatement(sql);
+    public ResultSet allRegister(String table) throws Exception {
+        this.sql = "SELECT * FROM " + table;
+        System.out.println(this.sql);
+        cn = conexionAPP();
+        PreparedStatement pst = cn.prepareStatement(this.sql);
         return pst.executeQuery();
     }
 
-    public ResultSet listaProductosPorMarca(int mID) throws Exception {
-        String sql = "SELECT CODIGO, MANUFACTURER_ID,purchase_cost"
-                + " FROM APP.PRODUCTOS where MANUFACTURER_ID > ?";
-        Connection cn = conexionAPP();
-        PreparedStatement pst = cn.prepareStatement(sql);
-        pst.setInt(1, mID);
-        return pst.executeQuery();
+    public void deleteRegister(String table, int id) throws Exception {
+        this.sql = "DELETE FROM " + table + " WHERE Id_Marca = ?;";
+        System.out.println(this.sql);
+        cn = conexionAPP();
+        PreparedStatement pst = cn.prepareStatement(this.sql);
+        pst.setInt(1, id);
+        pst.executeUpdate();
     }
 
-    public ResultSet listaFabricanteID() throws Exception {
-        String sql = "SELECT MANUFACTURER_ID FROM MANUFACTURER";
-        Connection cn = conexionAPP();
-        PreparedStatement pst = cn.prepareStatement(sql);
-        return pst.executeQuery();
+    // "insert into person values (null,?,?,?)");
+    public void insertRegister(String table,String nombre, String abrev) throws Exception {
+        this.sql = "INSERT INTO " + table + " VALUES(?, ?);";
+        System.out.println(this.sql);
+        cn = conexionAPP();
+        PreparedStatement pst = cn.prepareStatement(this.sql);
+        pst.setString(1, nombre);
+        pst.setString(2, abrev);
+        pst.executeUpdate();
     }
+
+    public void close() throws Exception {
+        cn.close();
+        System.out.println("BD-Conexion con base de datos cerrada");
+    }
+
+    private ResultSet rs;
+    private Connection cn;
+    private String sql;
 
 }

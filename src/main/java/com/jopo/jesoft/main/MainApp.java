@@ -1,53 +1,68 @@
 package com.jopo.jesoft.main;
 
-import com.jopo.jesoft.conexion.Conexion;
+import java.io.IOException;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class MainApp extends Application {
 
+    private Stage primaryStage; //stage primario
+    private BorderPane rootLayout; //aun no se para que se usa
+
     @Override
-    public void start(Stage stage) throws Exception {
+    public void init() {
+
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        this.primaryStage = primaryStage;
+        this.primaryStage.setTitle("Jesoft APP - Sistema MEMESEG S.A.C.");
+        initRootLayout();
+        showMarcasOverview();
+    }
+
+    public void initRootLayout() {
+
         try {
-            System.out.println("Ingrese al metodo START");
-            Parent root = FXMLLoader.load(getClass().getResource("/fxml/Marcas.fxml"));
+            System.out.println("Iniciando RootLayout");
+            //cargando el root layout desde el archivo fxml
 
-            Scene scene = new Scene(root);
-            scene.getStylesheets().add("/styles/Styles.css");
+            rootLayout = FXMLLoader.load(getClass().getResource("/fxml/RootLayout.fxml"));
+            //mostrando la escena contenida en el root layout
+            Scene scene = new Scene(rootLayout);
+            primaryStage.setScene(scene);
+            primaryStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-            stage.setTitle("JavaFX and Maven");
-            stage.setScene(scene);
-            stage.show();
-        } catch (Exception e) {
-            System.out.println("Error" + e);
+    public void showMarcasOverview() {
+
+        try {
+            System.out.println("Iniciando MarcasOverview");
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/fxml/MarcasOverview.fxml"));
+            VBox marcasOverview = (VBox) loader.load();
+            rootLayout.setCenter(marcasOverview); //colocar en el centro del root layout
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
 
-    @Override
-    public void init() {
-        System.out.println("entro al inicio");
-        String url = "jdbc:sqlserver://192.168.1.35:1433; databaseName=memeseg";
-        String user = "sa";
-        String password = "corel2duo";
-        Conexion cn = new Conexion(url, user, password);
-        cn.conectarBD();
+    public Stage getPrimaryStage() {
+        return primaryStage;
     }
 
-    /**
-     * The main() method is ignored in correctly deployed JavaFX application.
-     * main() serves only as fallback in case the application can not be
-     * launched through deployment artifacts, e.g., in IDEs with limited FX
-     * support. NetBeans ignores main().
-     *
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         launch(args);
     }
-
 }
