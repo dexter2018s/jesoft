@@ -1,0 +1,60 @@
+
+.button{
+    -fx-background-color: #202020;
+    -fx-alignment: CENTER;
+    -fx-font-size: 8pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+
+}
+
+.button:hover{
+    -fx-background-color: #777777;  
+}
+
+.button:pressed{
+    -fx-background-color: #5F5F5F;
+}
+
+#iconBar {
+    -fx-font-weight: bold;
+    -fx-background-color: #202020;
+    -fx-border-color: #535353;
+}
+
+#btnAgregar{
+    -fx-graphic: url(../images/agregar.png);
+}
+#btnEliminar{
+    -fx-graphic: url(../images/eliminar.png);
+}
+#btnSiguiente{
+    -fx-graphic: url(../images/siguiente.png);
+}
+#btnAnterior{
+    -fx-graphic: url(../images/anterior.png);
+}
+#btnUltimo{
+    -fx-graphic: url(../images/ultimo.png);
+}
+#btnPrimero{
+    -fx-graphic: url(../images/primero.png);
+}
+#btnEditar{
+    -fx-graphic: url(../images/editar.png);
+}
+#btnGuardar{
+    -fx-graphic: url(../images/guardar.png);
+}
+#btnBuscar{
+    -fx-graphic: url(../images/buscar.png);
+}
+
+#panelIzq{
+    -fx-background-image: url(../images/unidadesdemedida.png);
+
+    -fx-background-repeat:stretch;
+    -fx-background-position: top; 
+
+
+} 

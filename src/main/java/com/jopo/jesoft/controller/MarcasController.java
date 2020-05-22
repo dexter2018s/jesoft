@@ -13,9 +13,10 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-public class FXMLController implements Initializable {
+public class MarcasController implements Initializable {
 
     //variables creadas por Scene Builder
     @FXML
@@ -50,9 +51,13 @@ public class FXMLController implements Initializable {
     private Button btnSearchRegister;
     @FXML
     private TextField txtSearch;
+    @FXML
+    private Button btnUpdateRegister;
 
     //variables propias
     private ObservableList<Marca> marcasList;
+    private boolean updateOn = false;
+    private boolean addOn = false;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -65,7 +70,6 @@ public class FXMLController implements Initializable {
         marcasList = marcas.getMarcas();
         tblMarcas.setItems(marcasList);
         this.disableField();
-
     }
 
     @FXML
@@ -87,23 +91,50 @@ public class FXMLController implements Initializable {
 
     @FXML
     private void clic_btnAddRegister(ActionEvent event) {
+
         this.clearField();//limpiando campos
         this.enableField();//habilitando campos
+        addOn = true;
     }
 
     @FXML
     private void clic_btnSaveRegister(ActionEvent event) {
 
-        Marca marca = new Marca();
-        marca.insert(txtMarca.getText(), txtAbrev.getText());
-        marcasList = marca.getMarcas(); //obtener toda la lista de registros de la base de datos
-        tblMarcas.setItems(marcasList);
-        this.disableField();
+        if (addOn) {
+            Marca marca = new Marca();
+            marca.insert(txtMarca.getText(), txtAbrev.getText());
+            marcasList = marca.getMarcas(); //obtener toda la lista de registros de la base de datos
+            tblMarcas.setItems(marcasList);
+            tblMarcas.refresh();
+            this.disableField();
+            addOn = false;
+        }
+
+        if (updateOn) {
+
+            selectedIndex = tblMarcas.getSelectionModel().getSelectedIndex();
+            if (selectedIndex >= 0) {
+                Marca marca = new Marca();
+                int id = tblMarcas.getItems().get(selectedIndex).getId();
+                System.out.println("El id es: " + id);
+                marca.update(id, txtMarca.getText(), txtAbrev.getText());
+                marcasList = marca.getMarcas(); //obtener toda la lista de registros de la base de datos
+                tblMarcas.setItems(marcasList);
+                tblMarcas.refresh();
+                this.disableField();
+                updateOn = false;
+            } else {
+                // Nothing selected.
+                System.out.println("No se ha seleccionado nada");
+                this.disableField();
+                updateOn = false;
+            }
+        }
     }
 
     @FXML
     private void clic_btnDeleteRegister(ActionEvent event) {
-        int selectedIndex = tblMarcas.getSelectionModel().getSelectedIndex();
+        selectedIndex = tblMarcas.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
             int id = tblMarcas.getItems().get(selectedIndex).getId();
             System.out.println(id);
@@ -111,6 +142,7 @@ public class FXMLController implements Initializable {
             marcas.delete(id);
             marcasList = marcas.getMarcas(); //obtener toda la lista de registros de la base de datos
             tblMarcas.setItems(marcasList);
+            tblMarcas.refresh();
         } else {
             // Nothing selected.
             System.out.println("No se ha seleccionado nada");
@@ -119,19 +151,12 @@ public class FXMLController implements Initializable {
 
     @FXML
     private void clic_btnSearchRegister(ActionEvent event) {
-//        Servicios servicios = new Servicios();
-//        String nombre = txtSearch.getText();
-//        try {
-//            ResultSet rs = servicios.consulta("SELECT * FROM Marca WHERE Nombre LIKE" + "'%" + nombre + "%'");
-//            while (rs.next()) {
-//                System.out.println(rs.getString(1) + " | " + rs.getString(2) + " | " + rs.getString(3));
-//                Marca m = new Marca(rs.getString(1), rs.getString(2), rs.getString(3));
-//
-//            }
-//        } catch (Exception ex) {
-//            System.out.println("Error" + ex);
-//        }
-//        tblMarcas.refresh();
+        String filtro = txtSearch.getText();
+        Marca marcas = new Marca();
+        marcasList = marcas.search(filtro);
+        tblMarcas.setItems(marcasList);
+        tblMarcas.refresh();
+        this.disableField();
     }
 
     @FXML
@@ -160,9 +185,35 @@ public class FXMLController implements Initializable {
     }
 
     public void disableField() {
-       txtId.setDisable(true);
+        txtId.setDisable(true);
         txtMarca.setDisable(true);
         txtAbrev.setDisable(true);
         btnSaveRegister.setDisable(true);
     }
+
+    @FXML
+    private void clic_btnUpdateRegister(ActionEvent event) {
+
+        this.enableField();//habilitando campos
+        updateOn = true;
+
+    }
+
+    private int selectedIndex;
+
+    @FXML
+    private void key(KeyEvent event) {
+        
+    }
+
+    @FXML
+    private void keyPressed_txtSearch(KeyEvent event) {
+        String filtro = txtSearch.getText();
+        Marca marcas = new Marca();
+        marcasList = marcas.search(filtro);
+        tblMarcas.setItems(marcasList);
+        tblMarcas.refresh();
+        this.disableField();
+    }
+
 }

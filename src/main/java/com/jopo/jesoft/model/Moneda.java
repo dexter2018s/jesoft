@@ -5,9 +5,8 @@
  */
 package com.jopo.jesoft.model;
 
-import com.jopo.jesoft.conexion.ServiciosMarcas;
+import com.jopo.jesoft.conexion.ServiciosMonedas;
 import java.sql.ResultSet;
-import java.util.Objects;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -15,16 +14,17 @@ import javafx.collections.ObservableList;
  *
  * @author joelh
  */
-public class Marca {
+public class Moneda {
 
-    public Marca() {
+    public Moneda() {
 
     }
 
-    public Marca(int id, String nombre, String abrev) {
+    public Moneda(int id, String nombre, String simbolo, String descripcion) {
         this.id = id;
         this.nombre = nombre;
-        this.abrev = abrev;
+        this.simbolo = simbolo;
+        this.descripcion = descripcion;
     }
 
     public int getId() {
@@ -39,49 +39,33 @@ public class Marca {
         this.nombre = nombre;
     }
 
-    public String getAbrev() {
-        return abrev;
+    public String getSimbolo() {
+        return simbolo;
     }
 
-    public void setAbrev(String abrev) {
-        this.abrev = abrev;
+    public void setSimbolo(String simbolo) {
+        this.simbolo = simbolo;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.id);
-        return hash;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Marca other = (Marca) obj;
-        if (!Objects.equals(this.id, other.id)) {
-            return false;
-        }
-        return true;
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
-    public ObservableList<Marca> getMarcas() {
+    public ObservableList<Moneda> getMonedas() {
         obs = FXCollections.observableArrayList();
-        ServiciosMarcas s = new ServiciosMarcas();
+        ServiciosMonedas s = new ServiciosMonedas();
         try {
             ResultSet rs = s.all();
             while (rs.next()) {
                 id = rs.getInt(1);
                 nombre = rs.getString(2);
-                abrev = rs.getString(3);
-                Marca m = new Marca(id, nombre, abrev);
+                simbolo = rs.getString(3);
+                descripcion = rs.getString(4);
+                Moneda m = new Moneda(id, nombre, simbolo, descripcion);
                 obs.add(m);
             }
             s.close();
@@ -92,7 +76,7 @@ public class Marca {
     }
 
     public void delete(int id) {
-        ServiciosMarcas s = new ServiciosMarcas();
+        ServiciosMonedas s = new ServiciosMonedas();
         try {
             s.delete(id);//ejecutando delete mediante id
             //System.out.println("BD-Eliminacion exitosa");
@@ -102,10 +86,10 @@ public class Marca {
         }
     }
 
-    public void insert(String nombre, String abrev) {
-        ServiciosMarcas s = new ServiciosMarcas();
+    public void insert(String nombre, String simbolo, String descripcion) {
+        ServiciosMonedas s = new ServiciosMonedas();
         try {
-            s.insert(nombre, abrev);//ejecutando delete mediante id
+            s.insert(nombre, simbolo, descripcion);//ejecutando delete mediante id
             //System.out.println("BD-Eliminacion exitosa");
             s.close();
         } catch (Exception ex) {
@@ -113,11 +97,10 @@ public class Marca {
         }
     }
 
-    public void update(int id, String nombre, String abrev) {
-        ServiciosMarcas s = new ServiciosMarcas();
+    public void update(int id, String nombre, String simbolo, String descripcion) {
+        ServiciosMonedas s = new ServiciosMonedas();
         try {
-            System.out.println("Id: " + id + " Nombre: " + nombre + " abrev: " + abrev);
-            s.update(id, nombre, abrev);//ejecutando delete mediante id
+            s.update(id, nombre, simbolo, descripcion);//ejecutando delete mediante id
             //System.out.println("BD-Eliminacion exitosa");
             s.close();
         } catch (Exception ex) {
@@ -125,16 +108,17 @@ public class Marca {
         }
     }
 
-    public ObservableList<Marca> search(String filtro) {
+    public ObservableList<Moneda> search(String filtro) {
         obs = FXCollections.observableArrayList();
-        ServiciosMarcas s = new ServiciosMarcas();
+        ServiciosMonedas s = new ServiciosMonedas();
         try {
             ResultSet rs = s.search(filtro);
             while (rs.next()) {
                 id = rs.getInt(1);
                 nombre = rs.getString(2);
-                abrev = rs.getString(3);
-                Marca m = new Marca(id, nombre, abrev);
+                simbolo = rs.getString(3);
+                descripcion = rs.getString(4);
+                Moneda m = new Moneda(id, nombre, simbolo, descripcion);
                 obs.add(m);
             }
             s.close();
@@ -146,6 +130,7 @@ public class Marca {
 
     private int id;
     private String nombre;
-    private String abrev;
+    private String simbolo;
+    private String descripcion;
     private ObservableList obs;
 }

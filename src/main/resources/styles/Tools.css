@@ -1,0 +1,57 @@
+
+.button{
+    -fx-background-color: #202020;
+    -fx-alignment: CENTER;
+    -fx-font-size: 10pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+   
+}
+.label{
+    -fx-font-size: 10pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+}
+
+.button:hover{
+    -fx-background-color: #777777;  
+}
+
+.button:pressed{
+    -fx-background-color: #5F5F5F;
+}
+
+#tools {
+    -fx-font-weight: bold;
+    -fx-background-color: #202020;
+    -fx-border-color: #535353;
+}
+
+#btnProyecto{
+    -fx-graphic: url(../images/proyectos.png);
+}
+#btnPresupuestos{
+    -fx-graphic: url(../images/presupuestos.png);
+}
+#btnProductos{
+    -fx-graphic: url(../images/productos.png);
+}
+#btnClientes{
+    -fx-graphic: url(../images/clientes.png);
+}
+#btnMarcas{
+    -fx-graphic: url(../images/marcas.png);
+}
+#btnProveedores{
+    -fx-graphic: url(../images/proveedores.png);
+}
+#btnCuadrilla{
+    -fx-graphic: url(../images/cuadrilla.png);
+}
+#btnMonedas{
+    -fx-graphic: url(../images/monedas.png);
+}
+#btnUnidades{
+    -fx-graphic: url(../images/unidades.png);
+}
+

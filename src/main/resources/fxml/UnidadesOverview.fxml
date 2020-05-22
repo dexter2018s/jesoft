@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="500.0" minWidth="500.0" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jopo.jesoft.controller.UnidadesController">
+   <children>
+      <BorderPane prefHeight="600.0" prefWidth="800.0">
+         <bottom>
+            <HBox id="iconBar" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="500.0" prefHeight="60.0" prefWidth="800.0" stylesheets="@../styles/Unidades.css" BorderPane.alignment="CENTER">
+               <children>
+                  <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="500.0" prefWidth="800.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="701.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Button id="btnBuscar" contentDisplay="TOP" graphicTextGap="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clic_btnBuscar" stylesheets="@../styles/Monedas.css" text="Buscar" />
+                        <TextField fx:id="txtBuscar" onKeyReleased="#key_txtBuscar" GridPane.columnIndex="1">
+                           <GridPane.margin>
+                              <Insets />
+                           </GridPane.margin>
+                        </TextField>
+                     </children>
+                  </GridPane>
+               </children>
+               <padding>
+                  <Insets left="5.0" right="5.0" />
+               </padding>
+            </HBox>
+         </bottom>
+         <center>
+            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="300.0" prefHeight="480.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+               <children>
+                  <TableView fx:id="tblUnidades" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="300.0" onKeyReleased="#key_tblUnidades" onMouseClicked="#clic_tblUnidades" prefHeight="480.0" prefWidth="600.0" style="-fx-background-color: #202020;">
+                    <columns>
+                      <TableColumn fx:id="colAbreviatura" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Nombre" />
+                        <TableColumn fx:id="colDescripcion" maxWidth="1.7976931348623157E308" prefWidth="400.0" text="Descripcion" />
+                    </columns>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TableView>
+               </children>
+            </HBox>
+         </center>
+         <top>
+            <HBox id="iconBar" minWidth="500.0" prefHeight="60.0" prefWidth="800.0" stylesheets="@../styles/Unidades.css" BorderPane.alignment="CENTER">
+               <children>
+                  <GridPane minWidth="500.0">
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Button id="btnPrimero" contentDisplay="TOP" graphicTextGap="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clic_btnPrimer" stylesheets="@../styles/Unidades.css" text="Primer" />
+                        <Button id="btnAnterior" contentDisplay="TOP" graphicTextGap="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clic_btnAnterior" stylesheets="@../styles/Unidades.css" text="Anterior" GridPane.columnIndex="1" />
+                        <Button id="btnSiguiente" contentDisplay="TOP" graphicTextGap="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clic_btnSiguiente" stylesheets="@../styles/Unidades.css" text="Siguiente" GridPane.columnIndex="2" />
+                        <Button id="btnUltimo" contentDisplay="TOP" graphicTextGap="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clic_btnUltimo" stylesheets="@../styles/Unidades.css" text="Ultimo" GridPane.columnIndex="3" />
+                        <Button id="btnAgregar" contentDisplay="TOP" graphicTextGap="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clic_btnAgregar" stylesheets="@../styles/Unidades.css" text="Añadir" GridPane.columnIndex="4" />
+                        <Button id="btnEliminar" contentDisplay="TOP" graphicTextGap="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clic_btnEliminar" stylesheets="@../styles/Unidades.css" text="Eliminar" GridPane.columnIndex="6" />
+                        <Button id="btnGuardar" fx:id="btnGuardar" contentDisplay="TOP" graphicTextGap="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clic_btnGuardar" stylesheets="@../styles/Unidades.css" text="Guardar" GridPane.columnIndex="7" />
+                        <Button id="btnEditar" contentDisplay="TOP" graphicTextGap="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clic_btnEditar" stylesheets="@../styles/Unidades.css" text="Editar" GridPane.columnIndex="5" />
+                     </children>
+                  </GridPane>
+               </children>
+            </HBox>
+         </top>
+         <left>
+            <VBox id="panelIzq" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="480.0" prefWidth="200.0" stylesheets="@../styles/Unidades.css" BorderPane.alignment="CENTER">
+               <children>
+                  <GridPane opacity="0.88">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label alignment="CENTER" text="Datos de las Unidades" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font></Label>
+                        <TextField fx:id="txtAbreviatura" promptText="Abreviatura" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </GridPane.margin></TextField>
+                        <TextField fx:id="txtDescripcion" promptText="Descripción" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </GridPane.margin></TextField>
+                     </children>
+                  </GridPane>
+               </children>
+               <BorderPane.margin>
+                  <Insets />
+               </BorderPane.margin>
+            </VBox>
+         </left>
+      </BorderPane>
+   </children>
+</VBox>

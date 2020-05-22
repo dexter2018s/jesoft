@@ -133,3 +133,21 @@
 #btnDeleteRegister:pressed{
     -fx-background-color: #5F5F5F;
 }
+
+
+#btnUpdateRegister{
+    -fx-background-color: #202020;
+    -fx-graphic: url(../images/update.png);
+    -fx-alignment: CENTER;
+    -fx-border-color: gray;
+    -fx-border-radius: 4px;
+    -fx-border-width: 2px;
+}
+
+#btnUpdateRegister:hover{
+    -fx-background-color: #777777;  
+}
+
+#btnUpdateRegister:pressed{
+    -fx-background-color: #5F5F5F;
+}

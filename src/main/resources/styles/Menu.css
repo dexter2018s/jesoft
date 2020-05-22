@@ -1,0 +1,7 @@
+#menuBar{
+    -fx-color: #263238;                  /* Change according to your needs */
+    -fx-color-highlighted: #455a64;      /* Change according to your needs */
+    -fx-font-color: #FFFFFF;             /* Change according to your needs */
+    -fx-font-color-highlighted: #FFFFFF; /* Change according to your needs */
+    -fx-background-color:black;
+}

@@ -23,8 +23,10 @@ public class MainApp extends Application {
     public void start(Stage primaryStage) throws Exception {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Jesoft APP - Sistema MEMESEG S.A.C.");
+        this.primaryStage.centerOnScreen(); //centra la ventana al monitor;
+        this.primaryStage.setMaximized(true);
         initRootLayout();
-        showMarcasOverview();
+        //showMarcasOverview();
     }
 
     public void initRootLayout() {
@@ -38,24 +40,10 @@ public class MainApp extends Application {
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void showMarcasOverview() {
-
-        try {
-            System.out.println("Iniciando MarcasOverview");
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/fxml/MarcasOverview.fxml"));
-            VBox marcasOverview = (VBox) loader.load();
-            rootLayout.setCenter(marcasOverview); //colocar en el centro del root layout
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 
     public Stage getPrimaryStage() {

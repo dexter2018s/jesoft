@@ -1,0 +1,31 @@
+#bottomBar{
+    -fx-background-color: #333333;
+    -fx-border-color: #535353;
+}
+.button{
+    -fx-background-color: #202020;
+    -fx-alignment: CENTER;
+    -fx-font-size: 10pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+
+}
+.label{
+    -fx-font-size: 10pt;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: white;
+}
+
+.button:hover{
+    -fx-background-color: #777777;  
+}
+
+.button:pressed{
+    -fx-background-color: #5F5F5F;
+}
+
+#btnProyecto{
+    -fx-graphic: url(../images/proyectos.png);
+}
+
+
