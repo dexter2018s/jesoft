@@ -19,7 +19,12 @@ public class ServiciosUnidades {
         PreparedStatement pst = cn.prepareStatement(sql);
         return pst.executeQuery();
     }
-
+    public ResultSet getNombres() throws Exception {
+        sql = "SELECT Abreviatura FROM Unidades";
+        cn = conexionAPP();
+        PreparedStatement pst = cn.prepareStatement(sql);
+        return pst.executeQuery();
+    }
 //solicitar todos los registros que cumplan el filtro de nombre moneda
     public ResultSet search(String descripcion) throws Exception {
         sql = "SELECT * FROM Unidades WHERE Descripcion LIKE ?;";

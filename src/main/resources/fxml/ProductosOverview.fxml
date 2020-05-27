@@ -2,10 +2,12 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -13,10 +15,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.web.WebView?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="500.0" minWidth="500.0" prefHeight="600.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jopo.jesoft.controller.ProveedoresController">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="500.0" minWidth="500.0" prefHeight="800.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.jopo.jesoft.controller.ProductosController">
    <children>
-      <BorderPane prefHeight="600.0" prefWidth="1600.0">
+      <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="800.0" prefWidth="1920.0">
          <bottom>
             <HBox id="iconBar" maxWidth="1.7976931348623157E308" minWidth="500.0" prefHeight="60.0" prefWidth="1600.0" stylesheets="@../styles/Formulario.css" BorderPane.alignment="CENTER">
                <children>
@@ -44,20 +47,17 @@
             </HBox>
          </bottom>
          <center>
-            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="300.0" prefHeight="420.0" prefWidth="1300.0" BorderPane.alignment="CENTER">
+            <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="300.0" prefHeight="680.0" prefWidth="1300.0" BorderPane.alignment="CENTER">
                <children>
                   <TableView fx:id="tbl" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minWidth="300.0" onKeyReleased="#key_tbl" onMouseClicked="#clic_tbl" prefWidth="1300.0" style="-fx-background-color: #202020;" stylesheets="@../styles/Formulario.css">
                     <columns>
                       <TableColumn fx:id="colId" maxWidth="1.7976931348623157E308" prefWidth="60.0" text="Id" />
-                      <TableColumn fx:id="colRazonSocial" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Razon Social" />
-                        <TableColumn fx:id="colRuc" maxWidth="1.7976931348623157E308" prefWidth="120.0" text="RUC" />
-                        <TableColumn fx:id="colDireccion" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Dirección" />
-                        <TableColumn fx:id="colTelefono" prefWidth="100.0" text="Teléfono" />
-                        <TableColumn fx:id="colAnexo" prefWidth="60.0" text="Anexo" />
-                        <TableColumn fx:id="colCelular" prefWidth="75.0" text="Celular" />
-                        <TableColumn fx:id="colContacto" prefWidth="75.0" text="Contacto" />
-                        <TableColumn fx:id="colCorreo" prefWidth="200.0" text="Correo" />
-                        <TableColumn fx:id="colWeb" prefWidth="210.0" text="Web" />
+                      <TableColumn fx:id="colCodigo" maxWidth="1.7976931348623157E308" prefWidth="140.0" text="Codigo" />
+                        <TableColumn fx:id="colDescripcion" maxWidth="1.7976931348623157E308" prefWidth="570.0" text="Descripcion" />
+                        <TableColumn fx:id="colMarca" maxWidth="1.7976931348623157E308" prefWidth="150.0" text="Marca" />
+                        <TableColumn fx:id="colUnidad" prefWidth="81.0" text="Unidad" />
+                        <TableColumn fx:id="colPrecioCompra" prefWidth="150.0" text="PrecioCompra" />
+                        <TableColumn fx:id="colPrecioVenta" prefWidth="150.0" text="PrecioVenta" />
                     </columns>
                      <HBox.margin>
                         <Insets />
@@ -67,7 +67,7 @@
             </HBox>
          </center>
          <top>
-            <HBox id="iconBar" minWidth="500.0" prefHeight="60.0" prefWidth="1600.0" stylesheets="@../styles/Monedas.css" BorderPane.alignment="CENTER">
+            <HBox id="iconBar" minWidth="500.0" prefHeight="60.0" prefWidth="1920.0" stylesheets="@../styles/Monedas.css" BorderPane.alignment="CENTER">
                <children>
                   <GridPane minWidth="500.0" prefWidth="1200.0">
                     <columnConstraints>
@@ -98,7 +98,7 @@
             </HBox>
          </top>
          <left>
-            <VBox id="proveedoresFondo" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="480.0" prefWidth="300.0" stylesheets="@../styles/Formulario.css" BorderPane.alignment="CENTER">
+            <VBox id="productosFondo" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="680.0" prefWidth="320.0" stylesheets="@../styles/Formulario.css" BorderPane.alignment="CENTER">
                <children>
                   <GridPane opacity="0.83">
                     <columnConstraints>
@@ -108,8 +108,6 @@
                       <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
                       <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
@@ -126,48 +124,39 @@
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin></TextField>
-                        <TextField fx:id="txtRazonSocial" promptText="Razon Social" GridPane.rowIndex="2">
+                        <TextField fx:id="txtCodigo" promptText="Codigo" GridPane.rowIndex="2">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin></TextField>
-                        <TextField fx:id="txtRuc" promptText="RUC" GridPane.rowIndex="3">
+                        <TextField fx:id="txtDescripcion" promptText="Descripcion" GridPane.rowIndex="3">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin></TextField>
-                        <TextField fx:id="txtDireccion" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Direccion" GridPane.rowIndex="4">
-                           <GridPane.margin>
-                              <Insets left="5.0" right="5.0" />
-                           </GridPane.margin></TextField>
-                        <TextField fx:id="txtTelefono" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Telefono" GridPane.rowIndex="5">
+                        <TextField fx:id="txtWeb" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Web" GridPane.rowIndex="5">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <TextField fx:id="txtAnexo" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Anexo" GridPane.rowIndex="6">
+                        <TextField fx:id="txtPrecioCompra" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Precio de compra" GridPane.rowIndex="7">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <TextField fx:id="txtCelular" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Celular" GridPane.rowIndex="7">
+                        <TextField fx:id="txtPrecioVenta" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Precio de venta" GridPane.rowIndex="8">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <TextField fx:id="txtContacto" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Nombres del Contacto" GridPane.rowIndex="8">
+                        <ComboBox fx:id="cbMarca" onAction="#clic_cbMarca" prefWidth="320.0" promptText="Marca" GridPane.rowIndex="4">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
-                        </TextField>
-                        <TextField fx:id="txtCorreo" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Correo" GridPane.rowIndex="9">
+                        </ComboBox>
+                        <ComboBox fx:id="cbUnidad" onAction="#clic_cbUnidad" prefWidth="320.0" promptText="Unidad" GridPane.rowIndex="6">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
-                        </TextField>
-                        <TextField fx:id="txtWeb" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Web" GridPane.rowIndex="10">
-                           <GridPane.margin>
-                              <Insets left="5.0" right="5.0" />
-                           </GridPane.margin>
-                        </TextField>
+                        </ComboBox>
                      </children>
                   </GridPane>
                </children>
@@ -176,6 +165,14 @@
                </BorderPane.margin>
             </VBox>
          </left>
+         <right>
+            <VBox prefHeight="680.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fx:id="img" fitHeight="300.0" fitWidth="300.0" onMouseClicked="#clic_img" pickOnBounds="true" preserveRatio="true" />
+                  <WebView fx:id="webView" onMouseClicked="#clic_webView" prefHeight="384.0" prefWidth="300.0" />
+               </children>
+            </VBox>
+         </right>
       </BorderPane>
    </children>
 </VBox>

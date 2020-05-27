@@ -52,5 +52,10 @@
 #proveedoresFondo{
     -fx-background-image: url(../images/proveedores_fondo.png);
     -fx-background-repeat:stretch;
-    -fx-background-position: top; 
+    -fx-background-size:cover; 
+} 
+#productosFondo{
+    -fx-background-image: url(../images/BionicCobot.jpg);
+    -fx-background-repeat:stretch;
+    -fx-background-size:cover;
 } 

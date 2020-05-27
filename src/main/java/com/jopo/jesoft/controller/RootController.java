@@ -36,6 +36,21 @@ public class RootController implements Initializable {
 
     @FXML
     private void clic_btnProductos(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ProductosOverview.fxml"));
+            VBox productosOverview = (VBox) loader.load();
+            //ProveedoresController controlador=loader.getController();
+            Scene scene = new Scene(productosOverview);
+            Stage stage = new Stage();
+            //stage.initModality(Modality.APPLICATION_MODAL);
+            stage.sizeToScene();
+            stage.setTitle("Registro de PRODUCTOS");
+            stage.setScene(scene);
+            stage.showAndWait();
+
+        } catch (IOException ex) {
+            Logger.getLogger(RootController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML

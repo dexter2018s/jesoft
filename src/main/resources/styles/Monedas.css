@@ -53,6 +53,5 @@
 #panelIzq{
     -fx-background-image: url(../images/monedas.jpg);
     -fx-background-repeat: stretch;
-    -fx-background-position: center center; 
-    -fx-opacidad: 0.5;
+    -fx-background-size: cover; 
 }

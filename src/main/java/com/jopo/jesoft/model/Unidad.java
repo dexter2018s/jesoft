@@ -96,7 +96,7 @@ public class Unidad {
             ResultSet rs = s.search(filtro);
             while (rs.next()) {
                 abreviatura = rs.getString(1);
-                
+
                 descripcion = rs.getString(2);
                 Unidad u = new Unidad(abreviatura, descripcion);
                 obs.add(u);
@@ -108,7 +108,25 @@ public class Unidad {
         return obs;
     }
 
+    public ObservableList<String> getListNombres() {
+        nombresList = FXCollections.observableArrayList();
+        ServiciosUnidades s = new ServiciosUnidades();
+        try {
+            ResultSet rs = s.getNombres();
+            while (rs.next()) {
+                abreviatura = rs.getString(1);
+                nombresList.add(abreviatura);
+                //System.out.println(abreviatura);
+            }
+            s.close();
+        } catch (Exception ex) {
+            System.out.println("BD - " + ex);
+        }
+        return nombresList;
+    }
+
     private String abreviatura;
     private String descripcion;
     private ObservableList obs;
+    private ObservableList<String> nombresList;
 }

@@ -7,6 +7,7 @@ package com.jopo.jesoft.model;
 
 import com.jopo.jesoft.conexion.ServiciosMarcas;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Objects;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -47,6 +48,14 @@ public class Marca {
         this.abrev = abrev;
     }
 
+    public int getFilasAfectadas() {
+        return filasAfectadas;
+    }
+
+    public int getTotalFilas() {
+        return totalFilas;
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;
@@ -73,79 +82,114 @@ public class Marca {
     }
 
     public ObservableList<Marca> getMarcas() {
+        totalFilas = 0;
         obs = FXCollections.observableArrayList();
         ServiciosMarcas s = new ServiciosMarcas();
-        try {
-            ResultSet rs = s.all();
-            while (rs.next()) {
-                id = rs.getInt(1);
-                nombre = rs.getString(2);
-                abrev = rs.getString(3);
-                Marca m = new Marca(id, nombre, abrev);
-                obs.add(m);
+        ResultSet rs = s.all();
+        if (rs != null) {
+            try {
+                while (rs.next()) {
+                    id = rs.getInt(1);
+                    nombre = rs.getString(2);
+                    abrev = rs.getString(3);
+                    Marca m = new Marca(id, nombre, abrev);
+                    obs.add(m);
+                    totalFilas++;
+                }
+            } catch (SQLException ex) {
+                Alerta.info("" + ex);
             }
-            s.close();
-        } catch (Exception ex) {
-            System.out.println("BD - " + ex);
         }
+        s.close();
         return obs;
     }
 
     public void delete(int id) {
         ServiciosMarcas s = new ServiciosMarcas();
+        filasAfectadas = 0;
         try {
-            s.delete(id);//ejecutando delete mediante id
-            //System.out.println("BD-Eliminacion exitosa");
-            s.close();
+            filasAfectadas = s.delete(id);//ejecutando delete mediante id
+            if (filasAfectadas >= 1) {
+                Alerta.info("Eliminación Exitosa");
+            }
         } catch (Exception ex) {
-            System.out.println("BD - Eliminacion fallida:" + ex);
+            Alerta.info("Eliminación fallida");
         }
+        s.close();
     }
 
     public void insert(String nombre, String abrev) {
         ServiciosMarcas s = new ServiciosMarcas();
+        filasAfectadas = 0;
         try {
-            s.insert(nombre, abrev);//ejecutando delete mediante id
-            //System.out.println("BD-Eliminacion exitosa");
-            s.close();
+            filasAfectadas = s.insert(nombre, abrev);//ejecutando delete mediante id
+            if (filasAfectadas >= 1) {
+                Alerta.info("La marca se añadió correctamente");
+            }
         } catch (Exception ex) {
-            System.out.println("BD - Insercion fallida:" + ex);
+            Alerta.info("" + ex);
         }
+        s.close();
     }
 
     public void update(int id, String nombre, String abrev) {
+        filasAfectadas = 0;
         ServiciosMarcas s = new ServiciosMarcas();
         try {
-            System.out.println("Id: " + id + " Nombre: " + nombre + " abrev: " + abrev);
-            s.update(id, nombre, abrev);//ejecutando delete mediante id
-            //System.out.println("BD-Eliminacion exitosa");
-            s.close();
+            filasAfectadas = s.update(id, nombre, abrev);//ejecutando delete mediante id
+            if (filasAfectadas >= 1) {
+                Alerta.info("La marca se actualizó correctamente");
+            }
         } catch (Exception ex) {
-            System.out.println("BD - actualizacion fallida:" + ex);
+            Alerta.info("" + ex);
         }
+        s.close();
     }
 
     public ObservableList<Marca> search(String filtro) {
+        totalFilas = 0;
         obs = FXCollections.observableArrayList();
         ServiciosMarcas s = new ServiciosMarcas();
+        ResultSet rs = s.search(filtro);
         try {
-            ResultSet rs = s.search(filtro);
             while (rs.next()) {
                 id = rs.getInt(1);
                 nombre = rs.getString(2);
                 abrev = rs.getString(3);
                 Marca m = new Marca(id, nombre, abrev);
                 obs.add(m);
+                totalFilas++;
             }
-            s.close();
-        } catch (Exception ex) {
-            System.out.println("BD - " + ex);
+        } catch (SQLException ex) {
+            Alerta.info("" + ex);
         }
+        s.close();
         return obs;
+    }
+
+    public ObservableList<String> getListNombres() {
+        nombresList = FXCollections.observableArrayList();
+        ServiciosMarcas s = new ServiciosMarcas();
+        ResultSet rs = s.getNombres();
+        try {
+            while (rs.next()) {
+                nombre = rs.getString(1);
+                nombresList.add(nombre);
+                //System.out.println(nombre);
+            }
+
+        } catch (SQLException ex) {
+            Alerta.info("" + ex);
+        }
+        s.close();
+        return nombresList;
     }
 
     private int id;
     private String nombre;
     private String abrev;
     private ObservableList obs;
+    private ObservableList nombresList;
+    private int filasAfectadas;
+    private int totalFilas;
 }

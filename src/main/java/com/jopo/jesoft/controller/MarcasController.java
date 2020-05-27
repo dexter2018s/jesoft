@@ -1,5 +1,6 @@
 package com.jopo.jesoft.controller;
 
+import com.jopo.jesoft.model.Alerta;
 import com.jopo.jesoft.model.Marca;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -49,7 +50,6 @@ public class MarcasController implements Initializable {
     private TableColumn colAbrev;
     @FXML
     private Button btnSearchRegister;
-    @FXML
     private TextField txtSearch;
     @FXML
     private Button btnUpdateRegister;
@@ -58,6 +58,8 @@ public class MarcasController implements Initializable {
     private ObservableList<Marca> marcasList;
     private boolean updateOn = false;
     private boolean addOn = false;
+    @FXML
+    private TextField txtBuscar;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -95,6 +97,7 @@ public class MarcasController implements Initializable {
         this.clearField();//limpiando campos
         this.enableField();//habilitando campos
         addOn = true;
+        updateOn = false;
     }
 
     @FXML
@@ -106,8 +109,10 @@ public class MarcasController implements Initializable {
             marcasList = marca.getMarcas(); //obtener toda la lista de registros de la base de datos
             tblMarcas.setItems(marcasList);
             tblMarcas.refresh();
-            this.disableField();
-            addOn = false;
+            if (marca.getFilasAfectadas() > 0) {
+                this.disableField();
+                addOn = false;
+            }
         }
 
         if (updateOn) {
@@ -116,16 +121,17 @@ public class MarcasController implements Initializable {
             if (selectedIndex >= 0) {
                 Marca marca = new Marca();
                 int id = tblMarcas.getItems().get(selectedIndex).getId();
-                System.out.println("El id es: " + id);
                 marca.update(id, txtMarca.getText(), txtAbrev.getText());
                 marcasList = marca.getMarcas(); //obtener toda la lista de registros de la base de datos
                 tblMarcas.setItems(marcasList);
                 tblMarcas.refresh();
-                this.disableField();
-                updateOn = false;
+                if (marca.getFilasAfectadas() > 0) {
+                    this.disableField();
+                    updateOn = false;
+                }
             } else {
                 // Nothing selected.
-                System.out.println("No se ha seleccionado nada");
+                Alerta.info("Debe seleccionar la fila que desea actualizar");
                 this.disableField();
                 updateOn = false;
             }
@@ -137,16 +143,19 @@ public class MarcasController implements Initializable {
         selectedIndex = tblMarcas.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
             int id = tblMarcas.getItems().get(selectedIndex).getId();
-            System.out.println(id);
             Marca marcas = new Marca();
-            marcas.delete(id);
-            marcasList = marcas.getMarcas(); //obtener toda la lista de registros de la base de datos
-            tblMarcas.setItems(marcasList);
-            tblMarcas.refresh();
+            Boolean opcion = Alerta.confirm("¿Deseas eliminar el registro?");
+            if (opcion) {
+                marcas.delete(id);
+                marcasList = marcas.getMarcas(); //obtener toda la lista de registros de la base de datos
+                tblMarcas.setItems(marcasList);
+                tblMarcas.refresh();
+            }
         } else {
-            // Nothing selected.
-            System.out.println("No se ha seleccionado nada");
+            Alerta.info("Debe seleccionar una fila antes de eliminar");
         }
+        addOn = false;
+        updateOn = false;
     }
 
     @FXML
@@ -157,6 +166,8 @@ public class MarcasController implements Initializable {
         tblMarcas.setItems(marcasList);
         tblMarcas.refresh();
         this.disableField();
+        addOn = false;
+        updateOn = false;
     }
 
     @FXML
@@ -170,6 +181,8 @@ public class MarcasController implements Initializable {
             txtMarca.setText(m.getNombre());
             txtAbrev.setText(m.getAbrev());
         }
+        addOn = false;
+        updateOn = false;
     }
 
     public void clearField() {
@@ -194,26 +207,44 @@ public class MarcasController implements Initializable {
     @FXML
     private void clic_btnUpdateRegister(ActionEvent event) {
 
-        this.enableField();//habilitando campos
-        updateOn = true;
+        selectedIndex = tblMarcas.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            this.enableField();//habilitando campos
+            updateOn = true;
+            addOn = false;
+        } else {
+            Alerta.info("Debe seleccionar la fila que desea actualizar");
+        }
 
     }
 
     private int selectedIndex;
 
     @FXML
-    private void key(KeyEvent event) {
-        
-    }
-
-    @FXML
-    private void keyPressed_txtSearch(KeyEvent event) {
-        String filtro = txtSearch.getText();
+    private void key_txtBuscar(KeyEvent event) {
+        String filtro = txtBuscar.getText();
         Marca marcas = new Marca();
         marcasList = marcas.search(filtro);
         tblMarcas.setItems(marcasList);
         tblMarcas.refresh();
         this.disableField();
+        addOn = false;
+        updateOn = false;
+    }
+
+    @FXML
+    private void key_tbl(KeyEvent event) {
+        this.disableField();
+        Marca m = tblMarcas.getSelectionModel().getSelectedItem(); //retorna el item seleccionado
+        if (m == null) {
+            System.out.println("No se seleccionó nada");
+        } else {
+            txtId.setText(m.getId() + "");
+            txtMarca.setText(m.getNombre());
+            txtAbrev.setText(m.getAbrev());
+        }
+        addOn = false;
+        updateOn = false;
     }
 
 }
