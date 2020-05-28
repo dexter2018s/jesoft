@@ -18,7 +18,7 @@ public class Servicios {
 
     //establecer conexion con base de datos SQL SERVER
     public static Connection conexionAPP() {
-        String url = "jdbc:sqlserver://192.168.1.35:1433; databaseName=memeseg";
+        String url = "jdbc:sqlserver://192.168.1.7:1433; databaseName=memeseg";
         String user = "sa";
         String password = "corel2duo";
         try {
