@@ -22,10 +22,9 @@ public class Marca {
 
     }
 
-    public Marca(int id, String nombre, String abrev) {
+    public Marca(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
-        this.abrev = abrev;
     }
 
     public int getId() {
@@ -38,14 +37,6 @@ public class Marca {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getAbrev() {
-        return abrev;
-    }
-
-    public void setAbrev(String abrev) {
-        this.abrev = abrev;
     }
 
     public int getFilasAfectadas() {
@@ -91,16 +82,15 @@ public class Marca {
                 while (rs.next()) {
                     id = rs.getInt(1);
                     nombre = rs.getString(2);
-                    abrev = rs.getString(3);
-                    Marca m = new Marca(id, nombre, abrev);
+                    Marca m = new Marca(id, nombre);
                     obs.add(m);
                     totalFilas++;
                 }
             } catch (SQLException ex) {
-                Alerta.info("" + ex);
+                Alerta.error("" + ex);
             }
         }
-        s.close();
+        //s.close();
         return obs;
     }
 
@@ -113,37 +103,37 @@ public class Marca {
                 Alerta.info("Eliminación Exitosa");
             }
         } catch (Exception ex) {
-            Alerta.info("Eliminación fallida");
+            Alerta.error("" + ex);
         }
-        s.close();
+        //s.close();
     }
 
-    public void insert(String nombre, String abrev) {
+    public void insert(String nombre) {
         ServiciosMarcas s = new ServiciosMarcas();
         filasAfectadas = 0;
         try {
-            filasAfectadas = s.insert(nombre, abrev);//ejecutando delete mediante id
+            filasAfectadas = s.insert(nombre);//ejecutando delete mediante id
             if (filasAfectadas >= 1) {
                 Alerta.info("La marca se añadió correctamente");
             }
         } catch (Exception ex) {
-            Alerta.info("" + ex);
+            Alerta.error("" + ex);
         }
-        s.close();
+        //s.close();
     }
 
-    public void update(int id, String nombre, String abrev) {
+    public void update(int id, String nombre) {
         filasAfectadas = 0;
         ServiciosMarcas s = new ServiciosMarcas();
         try {
-            filasAfectadas = s.update(id, nombre, abrev);//ejecutando delete mediante id
+            filasAfectadas = s.update(id, nombre);//ejecutando delete mediante id
             if (filasAfectadas >= 1) {
                 Alerta.info("La marca se actualizó correctamente");
             }
         } catch (Exception ex) {
-            Alerta.info("" + ex);
+            Alerta.error("" + ex);
         }
-        s.close();
+        //s.close();
     }
 
     public ObservableList<Marca> search(String filtro) {
@@ -155,15 +145,14 @@ public class Marca {
             while (rs.next()) {
                 id = rs.getInt(1);
                 nombre = rs.getString(2);
-                abrev = rs.getString(3);
-                Marca m = new Marca(id, nombre, abrev);
+                Marca m = new Marca(id, nombre);
                 obs.add(m);
                 totalFilas++;
             }
         } catch (SQLException ex) {
-            Alerta.info("" + ex);
+            Alerta.error("" + ex);
         }
-        s.close();
+        //s.close();
         return obs;
     }
 
@@ -179,9 +168,9 @@ public class Marca {
             }
 
         } catch (SQLException ex) {
-            Alerta.info("" + ex);
+            Alerta.error("" + ex);
         }
-        s.close();
+        //s.close();
         return nombresList;
     }
 

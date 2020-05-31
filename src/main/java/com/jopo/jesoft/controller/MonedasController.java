@@ -1,5 +1,6 @@
 package com.jopo.jesoft.controller;
 
+import com.jopo.jesoft.model.Alerta;
 import com.jopo.jesoft.model.Moneda;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -13,10 +14,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TouchEvent;
 
 public class MonedasController implements Initializable {
 
@@ -107,6 +106,7 @@ public class MonedasController implements Initializable {
         this.clearField();//limpiando campos
         this.enableField();//habilitando campos
         addOn = true;
+        updateOn = false;
     }
 
     @FXML
@@ -114,46 +114,52 @@ public class MonedasController implements Initializable {
         selectedIndex = tblMonedas.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
             int id = tblMonedas.getItems().get(selectedIndex).getId();
-            System.out.println(id);
-            Moneda moneda = new Moneda();
-            moneda.delete(id);
-            monedasList = moneda.getMonedas(); //obtener toda la lista de registros de la base de datos
-            tblMonedas.setItems(monedasList);
-            tblMonedas.refresh();
+            Moneda m = new Moneda();
+            Boolean opcion = Alerta.confirm("¿Deseas eliminar el registro?");
+            if (opcion) {
+                m.delete(id);
+                monedasList = m.getMonedas(); //obtener toda la lista de registros de la base de datos
+                tblMonedas.setItems(monedasList);
+                tblMonedas.refresh();
+            }
         } else {
-            // Nothing selected.
-            System.out.println("No se ha seleccionado nada");
+            Alerta.info("Debe seleccionar una fila antes de eliminar");
         }
+        addOn = false;
+        updateOn = false;
     }
 
     @FXML
     private void clic_btnGuardar(ActionEvent event) {
+
         if (addOn) {
-            Moneda moneda = new Moneda();
-            moneda.insert(txtNombre.getText(), txtSimbolo.getText(), txtDescripcion.getText());
-            monedasList = moneda.getMonedas(); //obtener toda la lista de registros de la base de datos
+            Moneda m = new Moneda();
+            m.insert(txtNombre.getText(), txtSimbolo.getText(), txtDescripcion.getText());
+            monedasList = m.getMonedas(); //obtener toda la lista de registros de la base de datos
             tblMonedas.setItems(monedasList);
             tblMonedas.refresh();
-            this.disableField();
-            addOn = false;
+            if (m.getFilasAfectadas() > 0) {
+                this.disableField();
+                addOn = false;
+            }
         }
 
         if (updateOn) {
-
             selectedIndex = tblMonedas.getSelectionModel().getSelectedIndex();
             if (selectedIndex >= 0) {
-                Moneda moneda = new Moneda();
+                Moneda m = new Moneda();
                 int id = tblMonedas.getItems().get(selectedIndex).getId();
-                System.out.println("El id es: " + id);
-                moneda.update(id, txtNombre.getText(), txtSimbolo.getText(), txtDescripcion.getText());
-                monedasList = moneda.getMonedas(); //obtener toda la lista de registros de la base de datos
+                m.update(id, txtNombre.getText(), txtSimbolo.getText(), txtDescripcion.getText());
+                monedasList = m.getMonedas(); //obtener toda la lista de registros de la base de datos
                 tblMonedas.setItems(monedasList);
                 tblMonedas.refresh();
-                this.disableField();
-                updateOn = false;
+                if (m.getFilasAfectadas() > 0) {
+                    this.disableField();
+                    updateOn = false;
+                }
             } else {
                 // Nothing selected.
-                System.out.println("No se ha seleccionado nada");
+                Alerta.info("Debe seleccionar la fila que desea actualizar");
                 this.disableField();
                 updateOn = false;
             }
@@ -162,8 +168,14 @@ public class MonedasController implements Initializable {
 
     @FXML
     private void clic_btnEditar(ActionEvent event) {
-        this.enableField();//habilitando campos
-        updateOn = true;
+        selectedIndex = tblMonedas.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            this.enableField();//habilitando campos
+            updateOn = true;
+            addOn = false;
+        } else {
+            Alerta.info("Debe seleccionar la fila que desea actualizar");
+        }
     }
 
     @FXML
@@ -174,8 +186,9 @@ public class MonedasController implements Initializable {
         tblMonedas.setItems(monedasList);
         tblMonedas.refresh();
         this.disableField();
+        addOn = false;
+        updateOn = false;
     }
-
 
     @FXML
     private void clic_tblMonedas(MouseEvent event) {
@@ -189,6 +202,8 @@ public class MonedasController implements Initializable {
             txtSimbolo.setText(m.getSimbolo());
             txtDescripcion.setText(m.getDescripcion());
         }
+        addOn = false;
+        updateOn = false;
     }
 
     @FXML
@@ -198,7 +213,6 @@ public class MonedasController implements Initializable {
 
     @FXML
     private void key_tblMonedas(KeyEvent event) {
-        System.out.println("Escribi algo :)");
         this.disableField();
         Moneda m = tblMonedas.getSelectionModel().getSelectedItem(); //retorna el item seleccionado
         if (m == null) {
@@ -209,17 +223,18 @@ public class MonedasController implements Initializable {
             txtSimbolo.setText(m.getSimbolo());
             txtDescripcion.setText(m.getDescripcion());
         }
+        addOn = false;
+        updateOn = false;
     }
 
     @FXML
     private void key_txtBuscar(KeyEvent event) {
-                String filtro = txtBuscar.getText();
+        String filtro = txtBuscar.getText();
         Moneda moneda = new Moneda();
         monedasList = moneda.search(filtro);
         tblMonedas.setItems(monedasList);
         tblMonedas.refresh();
         this.disableField();
     }
-    
 
 }

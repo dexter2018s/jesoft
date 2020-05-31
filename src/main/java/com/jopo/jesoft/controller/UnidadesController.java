@@ -1,5 +1,6 @@
 package com.jopo.jesoft.controller;
 
+import com.jopo.jesoft.model.Alerta;
 import com.jopo.jesoft.model.Unidad;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -43,10 +44,10 @@ public class UnidadesController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
 
         unidadesList = FXCollections.observableArrayList();
-        this.colAbreviatura.setCellValueFactory(new PropertyValueFactory("abreviatura"));
+        this.colAbreviatura.setCellValueFactory(new PropertyValueFactory("idUnidad"));
         this.colDescripcion.setCellValueFactory(new PropertyValueFactory("descripcion"));
         Unidad u = new Unidad();
-        unidadesList = u.getUnidades();
+        unidadesList = u.getAll();
         tblUnidades.setItems(unidadesList);
         this.disableField();
     }
@@ -90,23 +91,27 @@ public class UnidadesController implements Initializable {
         this.clearField();//limpiando campos
         this.enableField();//habilitando campos
         addOn = true;
+        updateOn = false;
     }
 
     @FXML
     private void clic_btnEliminar(ActionEvent event) {
         selectedIndex = tblUnidades.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
-            String abreviatura = tblUnidades.getItems().get(selectedIndex).getAbreviatura();
-            System.out.println(abreviatura);
+            String id = tblUnidades.getItems().get(selectedIndex).getIdUnidad();
             Unidad u = new Unidad();
-            u.delete(abreviatura);
-            unidadesList = u.getUnidades(); //obtener toda la lista de registros de la base de datos
-            tblUnidades.setItems(unidadesList);
-            tblUnidades.refresh();
+            Boolean opcion = Alerta.confirm("¿Deseas eliminar el registro?");
+            if (opcion) {
+                u.delete(id);
+                unidadesList = u.getAll(); //obtener toda la lista de registros de la base de datos
+                tblUnidades.setItems(unidadesList);
+                tblUnidades.refresh();
+            }
         } else {
-            // Nothing selected.
-            System.out.println("No se ha seleccionado nada");
+            Alerta.info("Debe seleccionar una fila antes de eliminar");
         }
+        addOn = false;
+        updateOn = false;
     }
 
     @FXML
@@ -114,11 +119,13 @@ public class UnidadesController implements Initializable {
         if (addOn) {
             Unidad u = new Unidad();
             u.insert(txtAbreviatura.getText(), txtDescripcion.getText());
-            unidadesList = u.getUnidades(); //obtener toda la lista de registros de la base de datos
+            unidadesList = u.getAll(); //obtener toda la lista de registros de la base de datos
             tblUnidades.setItems(unidadesList);
             tblUnidades.refresh();
-            this.disableField();
-            addOn = false;
+            if (u.getFilasAfectadas() > 0) {
+                this.disableField();
+                addOn = false;
+            }
         }
 
         if (updateOn) {
@@ -126,17 +133,18 @@ public class UnidadesController implements Initializable {
             selectedIndex = tblUnidades.getSelectionModel().getSelectedIndex();
             if (selectedIndex >= 0) {
                 Unidad u = new Unidad();
-                String abreviatura = tblUnidades.getItems().get(selectedIndex).getAbreviatura();
-                System.out.println("La abreviatura es: " + abreviatura);
-                u.update(txtAbreviatura.getText(), txtDescripcion.getText());
-                unidadesList = u.getUnidades(); //obtener toda la lista de registros de la base de datos
+                String id = tblUnidades.getItems().get(selectedIndex).getIdUnidad();
+                u.update(id, txtDescripcion.getText());
+                unidadesList = u.getAll(); //obtener toda la lista de registros de la base de datos
                 tblUnidades.setItems(unidadesList);
                 tblUnidades.refresh();
-                this.disableField();
-                updateOn = false;
+                if (u.getFilasAfectadas() > 0) {
+                    this.disableField();
+                    updateOn = false;
+                }
             } else {
                 // Nothing selected.
-                System.out.println("No se ha seleccionado nada");
+                Alerta.info("Debe seleccionar la fila que desea actualizar");
                 this.disableField();
                 updateOn = false;
             }
@@ -145,8 +153,14 @@ public class UnidadesController implements Initializable {
 
     @FXML
     private void clic_btnEditar(ActionEvent event) {
-        txtDescripcion.setDisable(false);
-        updateOn = true;
+        selectedIndex = tblUnidades.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            this.enableField();//habilitando campos
+            updateOn = true;
+            addOn = false;
+        } else {
+            Alerta.info("Debe seleccionar la fila que desea actualizar");
+        }
     }
 
     @FXML
@@ -157,6 +171,8 @@ public class UnidadesController implements Initializable {
         tblUnidades.setItems(unidadesList);
         tblUnidades.refresh();
         this.disableField();
+        addOn = false;
+        updateOn = false;
     }
 
     @FXML
@@ -166,21 +182,20 @@ public class UnidadesController implements Initializable {
         if (u == null) {
             System.out.println("No se seleccionó nada");
         } else {
-            txtAbreviatura.setText(u.getAbreviatura());
+            txtAbreviatura.setText(u.getIdUnidad());
             txtDescripcion.setText(u.getDescripcion());
         }
     }
 
     @FXML
     private void key_tblUnidades(KeyEvent event) {
-        System.out.println("Escribi algo :)");
         this.disableField();
-        Unidad m = tblUnidades.getSelectionModel().getSelectedItem(); //retorna el item seleccionado
-        if (m == null) {
+        Unidad u = tblUnidades.getSelectionModel().getSelectedItem(); //retorna el item seleccionado
+        if (u == null) {
             System.out.println("No se seleccionó nada");
         } else {
-            txtAbreviatura.setText(m.getAbreviatura() + "");
-            txtDescripcion.setText(m.getDescripcion());
+            txtAbreviatura.setText(u.getIdUnidad());
+            txtDescripcion.setText(u.getDescripcion());
         }
     }
 
@@ -192,6 +207,8 @@ public class UnidadesController implements Initializable {
         tblUnidades.setItems(unidadesList);
         tblUnidades.refresh();
         this.disableField();
+        addOn = false;
+        updateOn = false;
     }
 
 }

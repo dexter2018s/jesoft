@@ -1,16 +1,21 @@
 package com.jopo.jesoft.conexion;
 
 import com.jopo.jesoft.model.Alerta;
-import java.io.FileInputStream;
 import java.sql.*;
 
-public class ServiciosProductos extends Servicios {
+public class ServiciosProductos {
 
 //solicitar todos los registros de una tabla
     public ResultSet all() {
-        sql = "SELECT Id_productos, Codigo, Productos.Descripcion, Marcas.Nombre, Web, Unidades.Abreviatura, Imagen, PrecioCompra, PrecioVenta\n"
-                + "FROM Productos INNER JOIN Marcas ON Productos.Id_marca=Marcas.Id_marca INNER JOIN Unidades ON Productos.Id_unidad=Unidades.Abreviatura";
-        cn = super.conexionAPP();
+        sql = "SELECT idProducto, codigo, PRODUCTOS.descripcion, web, imagen, UNIDADES.idUnidad, MARCAS.nombre,\n"
+                + "TIPOPRODUCTOS.nombre, precioCompra, precioVenta, MONEDAS.simbolo\n"
+                + "FROM PRODUCTOS\n"
+                + "INNER JOIN MARCAS ON PRODUCTOS.idMarca=MARCAS.idMarca\n"
+                + "INNER JOIN UNIDADES ON PRODUCTOS.idUnidad=UNIDADES.idUnidad\n"
+                + "INNER JOIN TIPOPRODUCTOS ON PRODUCTOS.idTipoProducto=TIPOPRODUCTOS.idTipoProducto\n"
+                + "INNER JOIN MONEDAS ON PRODUCTOS.idMoneda=MONEDAS.idMoneda\n"
+                + "ORDER BY PRODUCTOS.idProducto;";
+        cn = Servicio.getConnection();
         if (cn != null) {
             try {
                 PreparedStatement pst = cn.prepareStatement(sql);
@@ -24,10 +29,16 @@ public class ServiciosProductos extends Servicios {
 
 //solicitar todos los registros que cumplan el filtro
     public ResultSet search(String descripcion) {
-        sql = "SELECT Id_productos, Codigo, Productos.Descripcion, Marcas.Nombre, Web, Unidades.Abreviatura, Imagen, PrecioCompra, PrecioVenta\n"
-                + "FROM Productos INNER JOIN Marcas ON Productos.Id_marca=Marcas.Id_marca INNER JOIN Unidades ON Productos.Id_unidad=Unidades.Abreviatura "
-                + "WHERE Productos.Descripcion LIKE ?;";
-        cn = super.conexionAPP();
+        sql = "SELECT idProducto, codigo, PRODUCTOS.descripcion, web, imagen, UNIDADES.idUnidad, MARCAS.nombre, ,\n"
+                + "TIPOPRODUCTOS.nombre, precioCompra, precioVenta, MONEDAS.simbolo\n"
+                + "FROM PRODUCTOS\n"
+                + "INNER JOIN MARCAS ON PRODUCTOS.idMarca=MARCAS.idMarca\n"
+                + "INNER JOIN UNIDADES ON PRODUCTOS.idUnidad=UNIDADES.idUnidad\n"
+                + "INNER JOIN TIPOPRODUCTOS ON PRODUCTOS.idTipoProducto=TIPOPRODUCTOS.idTipoProducto\n"
+                + "INNER JOIN MONEDAS ON PRODUCTOS.idMoneda=MONEDAS.idMoneda\n"
+                + "WHERE PRODUCTOS.idProducto=?"
+                + "ORDER BY PRODUCTOS.idProducto;";
+        cn = Servicio.getConnection();
         if (cn != null) {
             try {
                 PreparedStatement pst = cn.prepareStatement(sql);
@@ -43,8 +54,8 @@ public class ServiciosProductos extends Servicios {
 //eliminar un registro mediante su id
     public int delete(int id) {
         filasAfectadas = 0;
-        sql = "DELETE FROM Productos WHERE Id_productos = ?;";
-        cn = super.conexionAPP();
+        sql = "DELETE FROM PRODUCTOS WHERE idProducto = ?;";
+        cn = Servicio.getConnection();
         if (cn != null) {
             try {
                 PreparedStatement pst = cn.prepareStatement(sql);
@@ -58,21 +69,26 @@ public class ServiciosProductos extends Servicios {
     }
 
 // añadir un registro
-    public int insert(String codigo, String descripcion, String marca, String web, String unidad, FileInputStream imagen, double precioCompra, double precioVenta) throws Exception {
-        sql = "INSERT INTO Productos VALUES(?, ?, (SELECT Id_marca FROM Marcas WHERE Nombre=?), ?, ?, ?, ?, ?)";
+    public int insert(String codigo, String descripcion, String web, String imagen, String unidad, String marca, String tipoProducto,
+            double precioCompra, double precioVenta, String moneda) {
+        sql = "INSERT INTO PRODUCTOS (codigo, descripcion, web, imagen, idUnidad, idMarca, idTipoProducto, precioCompra, precioVenta, idMoneda)\n"
+                + " VALUES(?, ?, ?, ?, ?,(SELECT idMarca FROM MARCAS WHERE nombre=?), (SELECT idTipoProducto FROM TIPOPRODUCTOS WHERE nombre=?),"
+                + " ?,?,(SELECT idMoneda FROM MONEDAS WHERE simbolo=?));";
         filasAfectadas = 0;
-        cn = super.conexionAPP();
+        cn = Servicio.getConnection();
         if (cn != null) {
             try {
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setString(1, codigo);
                 pst.setString(2, descripcion);
-                pst.setString(3, marca);
-                pst.setString(4, web);
+                pst.setString(3, web);
+                pst.setString(4, imagen);
                 pst.setString(5, unidad);
-                pst.setBinaryStream(6, imagen);
-                pst.setDouble(7, precioCompra);
-                pst.setDouble(8, precioVenta);
+                pst.setString(6, marca);
+                pst.setString(7, tipoProducto);
+                pst.setDouble(8, precioCompra);
+                pst.setDouble(9, precioVenta);
+                pst.setString(10, moneda);
                 filasAfectadas = pst.executeUpdate();
             } catch (SQLException ex) {
                 Alerta.error("" + ex);
@@ -82,23 +98,28 @@ public class ServiciosProductos extends Servicios {
     }
 
 // editar un registro
-    public int update(int id, String codigo, String descripcion, String marca, String web, String unidad, FileInputStream imagen, double precioCompra, double precioVenta) throws Exception {
-        sql = "UPDATE Productos SET Codigo= ?, Descripcion= ?, Id_marca= (SELECT Id_marca FROM Marcas WHERE Nombre=?), Web= ?, Id_unidad=?,"
-                + " Imagen= ?, PrecioCompra= ?, PrecioVenta= ? WHERE Id_productos= ?;";
+    public int update(int idProducto, String codigo, String descripcion, String web, String imagen, String unidad, String marca, String tipoProducto,
+            double precioCompra, double precioVenta, String moneda) throws Exception {
+        sql = "UPDATE PRODUCTOS SET codigo= ?, descripcion= ?, web = ?, imagen = ?, idUnidad = ?, idMarca= (SELECT idMarca FROM MARCAS WHERE nombre=?), "
+                + "idTipoProducto = (SELECT idTipoProducto FROM TIPOPRODUCTOS WHERE nombre=?), "
+                + "precioCompra=?, precioVenta=?, idMoneda= (SELECT idMoneda FROM MONEDAS WHERE simbolo=?) "
+                + "WHERE idProducto= ?;";
         filasAfectadas = 0;
-        cn = super.conexionAPP();
+        cn = Servicio.getConnection();
         if (cn != null) {
             try {
                 PreparedStatement pst = cn.prepareStatement(sql);
                 pst.setString(1, codigo);
                 pst.setString(2, descripcion);
-                pst.setString(3, marca);
-                pst.setString(4, web);
+                pst.setString(3, web);
+                pst.setString(4, imagen);
                 pst.setString(5, unidad);
-                pst.setBinaryStream(6, imagen);
-                pst.setDouble(7, precioCompra);
-                pst.setDouble(8, precioVenta);
-                pst.setInt(9, id);
+                pst.setString(6, marca);
+                pst.setString(7, tipoProducto);
+                pst.setDouble(8, precioCompra);
+                pst.setDouble(9, precioVenta);
+                pst.setString(10, moneda);
+                pst.setInt(11, idProducto);
                 filasAfectadas = pst.executeUpdate();
             } catch (SQLException ex) {
                 Alerta.error("" + ex);

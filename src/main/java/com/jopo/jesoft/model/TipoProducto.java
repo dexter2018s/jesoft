@@ -5,7 +5,7 @@
  */
 package com.jopo.jesoft.model;
 
-import com.jopo.jesoft.conexion.ServiciosMonedas;
+import com.jopo.jesoft.conexion.ServiciosTipoProductos;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
@@ -15,21 +15,23 @@ import javafx.collections.ObservableList;
  *
  * @author joelh
  */
-public class Moneda {
+public class TipoProducto {
 
-    public Moneda() {
+    public TipoProducto() {
 
     }
 
-    public Moneda(int id, String nombre, String simbolo, String descripcion) {
+    public TipoProducto(int id, String nombre) {
         this.id = id;
         this.nombre = nombre;
-        this.simbolo = simbolo;
-        this.descripcion = descripcion;
     }
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -40,20 +42,20 @@ public class Moneda {
         this.nombre = nombre;
     }
 
-    public String getSimbolo() {
-        return simbolo;
+    public ObservableList getObs() {
+        return obs;
     }
 
-    public void setSimbolo(String simbolo) {
-        this.simbolo = simbolo;
+    public void setObs(ObservableList obs) {
+        this.obs = obs;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public ObservableList getNombresList() {
+        return nombresList;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setNombresList(ObservableList nombresList) {
+        this.nombresList = nombresList;
     }
 
     public int getFilasAfectadas() {
@@ -72,19 +74,17 @@ public class Moneda {
         this.totalFilas = totalFilas;
     }
 
-    public ObservableList<Moneda> getMonedas() {
+    public ObservableList<Marca> getMarcas() {
         totalFilas = 0;
         obs = FXCollections.observableArrayList();
-        ServiciosMonedas s = new ServiciosMonedas();
+        ServiciosTipoProductos s = new ServiciosTipoProductos();
         ResultSet rs = s.all();
         if (rs != null) {
             try {
                 while (rs.next()) {
                     id = rs.getInt(1);
                     nombre = rs.getString(2);
-                    simbolo = rs.getString(3);
-                    descripcion = rs.getString(4);
-                    Moneda m = new Moneda(id, nombre, simbolo, descripcion);
+                    Marca m = new Marca(id, nombre);
                     obs.add(m);
                     totalFilas++;
                 }
@@ -92,12 +92,12 @@ public class Moneda {
                 Alerta.error("" + ex);
             }
         }
-        // s.close();
+        //s.close();
         return obs;
     }
 
     public void delete(int id) {
-        ServiciosMonedas s = new ServiciosMonedas();
+        ServiciosTipoProductos s = new ServiciosTipoProductos();
         filasAfectadas = 0;
         try {
             filasAfectadas = s.delete(id);//ejecutando delete mediante id
@@ -107,14 +107,14 @@ public class Moneda {
         } catch (Exception ex) {
             Alerta.error("" + ex);
         }
-        // s.close();
+        //s.close();
     }
 
-    public void insert(String nombre, String simbolo, String descripcion) {
-        ServiciosMonedas s = new ServiciosMonedas();
+    public void insert(String nombre) {
+        ServiciosTipoProductos s = new ServiciosTipoProductos();
         filasAfectadas = 0;
         try {
-            filasAfectadas = s.insert(nombre, simbolo, descripcion);//ejecutando delete mediante id
+            filasAfectadas = s.insert(nombre);//ejecutando delete mediante id
             if (filasAfectadas >= 1) {
                 Alerta.info("La marca se añadió correctamente");
             }
@@ -124,11 +124,11 @@ public class Moneda {
         //s.close();
     }
 
-    public void update(int id, String nombre, String simbolo, String descripcion) {
+    public void update(int id, String nombre) {
         filasAfectadas = 0;
-        ServiciosMonedas s = new ServiciosMonedas();
+        ServiciosTipoProductos s = new ServiciosTipoProductos();
         try {
-            filasAfectadas = s.update(id, nombre, simbolo, descripcion);//ejecutando delete mediante id
+            filasAfectadas = s.update(id, nombre);//ejecutando delete mediante id
             if (filasAfectadas >= 1) {
                 Alerta.info("La marca se actualizó correctamente");
             }
@@ -138,31 +138,29 @@ public class Moneda {
         //s.close();
     }
 
-    public ObservableList<Moneda> search(String filtro) {
+    public ObservableList<Marca> search(String filtro) {
         totalFilas = 0;
         obs = FXCollections.observableArrayList();
-        ServiciosMonedas s = new ServiciosMonedas();
+        ServiciosTipoProductos s = new ServiciosTipoProductos();
         ResultSet rs = s.search(filtro);
         try {
             while (rs.next()) {
                 id = rs.getInt(1);
                 nombre = rs.getString(2);
-                simbolo = rs.getString(3);
-                descripcion = rs.getString(4);
-                Moneda m = new Moneda(id, nombre, simbolo, descripcion);
+                Marca m = new Marca(id, nombre);
                 obs.add(m);
                 totalFilas++;
             }
         } catch (SQLException ex) {
             Alerta.error("" + ex);
         }
-        // s.close();
+        //s.close();
         return obs;
     }
 
     public ObservableList<String> getListNombres() {
         nombresList = FXCollections.observableArrayList();
-        ServiciosMonedas s = new ServiciosMonedas();
+        ServiciosTipoProductos s = new ServiciosTipoProductos();
         ResultSet rs = s.getNombres();
         try {
             while (rs.next()) {
@@ -180,8 +178,6 @@ public class Moneda {
 
     private int id;
     private String nombre;
-    private String simbolo;
-    private String descripcion;
     private ObservableList obs;
     private ObservableList nombresList;
     private int filasAfectadas;

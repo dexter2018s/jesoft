@@ -52,10 +52,10 @@
                       <TableColumn fx:id="colRazonSocial" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Razon Social" />
                         <TableColumn fx:id="colRuc" maxWidth="1.7976931348623157E308" prefWidth="120.0" text="RUC" />
                         <TableColumn fx:id="colDireccion" maxWidth="1.7976931348623157E308" prefWidth="200.0" text="Dirección" />
-                        <TableColumn fx:id="colTelefono" prefWidth="100.0" text="Teléfono" />
-                        <TableColumn fx:id="colAnexo" prefWidth="60.0" text="Anexo" />
+                        <TableColumn fx:id="colContacto" prefWidth="100.0" text="Contacto" />
+                        <TableColumn fx:id="colTelefono" prefWidth="60.0" text="Telefono" />
+                        <TableColumn fx:id="colAnexo" prefWidth="75.0" text="Anexo" />
                         <TableColumn fx:id="colCelular" prefWidth="75.0" text="Celular" />
-                        <TableColumn fx:id="colContacto" prefWidth="75.0" text="Contacto" />
                         <TableColumn fx:id="colCorreo" prefWidth="200.0" text="Correo" />
                         <TableColumn fx:id="colWeb" prefWidth="210.0" text="Web" />
                     </columns>
@@ -138,22 +138,22 @@
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin></TextField>
-                        <TextField fx:id="txtTelefono" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Telefono" GridPane.rowIndex="5">
+                        <TextField fx:id="txtTelefono" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Telefono" GridPane.rowIndex="6">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <TextField fx:id="txtAnexo" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Anexo" GridPane.rowIndex="6">
+                        <TextField fx:id="txtAnexo" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Anexo" GridPane.rowIndex="7">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <TextField fx:id="txtCelular" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Celular" GridPane.rowIndex="7">
+                        <TextField fx:id="txtCelular" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Celular" GridPane.rowIndex="8">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <TextField fx:id="txtContacto" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Nombres del Contacto" GridPane.rowIndex="8">
+                        <TextField fx:id="txtContacto" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Nombres del Contacto" GridPane.rowIndex="5">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>

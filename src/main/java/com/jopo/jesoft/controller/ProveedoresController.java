@@ -5,6 +5,7 @@
  */
 package com.jopo.jesoft.controller;
 
+import com.jopo.jesoft.model.Alerta;
 import com.jopo.jesoft.model.Proveedor;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -82,19 +83,19 @@ public class ProveedoresController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         proveedoresList = FXCollections.observableArrayList();
-        this.colId.setCellValueFactory(new PropertyValueFactory("id"));
+        this.colId.setCellValueFactory(new PropertyValueFactory("idProveedor"));
         this.colRazonSocial.setCellValueFactory(new PropertyValueFactory("razonSocial"));
         this.colRuc.setCellValueFactory(new PropertyValueFactory("ruc"));
         this.colDireccion.setCellValueFactory(new PropertyValueFactory("direccion"));
+        this.colContacto.setCellValueFactory(new PropertyValueFactory("contacto"));
         this.colTelefono.setCellValueFactory(new PropertyValueFactory("telefono"));
         this.colAnexo.setCellValueFactory(new PropertyValueFactory("anexo"));
         this.colCelular.setCellValueFactory(new PropertyValueFactory("celular"));
-        this.colContacto.setCellValueFactory(new PropertyValueFactory("contacto"));
         this.colCorreo.setCellValueFactory(new PropertyValueFactory("correo"));
         this.colWeb.setCellValueFactory(new PropertyValueFactory("web"));
 
         Proveedor p = new Proveedor();
-        proveedoresList = p.getProveedor();
+        proveedoresList = p.getAll();
         tbl.setItems(proveedoresList);
         this.disableField();
     }
@@ -162,45 +163,42 @@ public class ProveedoresController implements Initializable {
         this.clearField();//limpiando campos
         this.enableField();//habilitando campos
         addOn = true;
+        updateOn = false;
     }
 
     @FXML
     private void clic_btnEliminar(ActionEvent event) {
         selectedIndex = tbl.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
-            int id = tbl.getItems().get(selectedIndex).getId();
-            System.out.println(id);
+            int id = tbl.getItems().get(selectedIndex).getIdProveedor();
             Proveedor p = new Proveedor();
-            p.delete(id);
-            proveedoresList = p.getProveedor(); //obtener toda la lista de registros de la base de datos
-            tbl.setItems(proveedoresList);
-            tbl.refresh();
+            Boolean opcion = Alerta.confirm("¿Deseas eliminar el registro?");
+            if (opcion) {
+                p.delete(id);
+                proveedoresList = p.getAll(); //obtener toda la lista de registros de la base de datos
+                tbl.setItems(proveedoresList);
+                tbl.refresh();
+            }
         } else {
-            // Nothing selected.
-            System.out.println("No se ha seleccionado nada");
+            Alerta.info("Debe seleccionar una fila antes de eliminar");
         }
+        addOn = false;
+        updateOn = false;
     }
 
     @FXML
     private void clic_btnGuardar(ActionEvent event) {
         if (addOn) {
             Proveedor p = new Proveedor();
-            String razonSocial = txtRazonSocial.getText();
-            long ruc = Long.parseLong(txtRuc.getText());
-            String direccion = txtDireccion.getText();
-            String telefono = txtTelefono.getText();
-            int anexo = Integer.parseInt(txtAnexo.getText());
-            String celular = txtCelular.getText();
-            String contacto = txtContacto.getText();
-            String correo = txtCorreo.getText();;
-            String web = txtWeb.getText();;
-
-            p.insert(razonSocial, ruc, direccion, telefono, anexo, celular, contacto, correo, web);
-            proveedoresList = p.getProveedor(); //obtener toda la lista de registros de la base de datos
+            p.insert(txtRazonSocial.getText(), txtRuc.getText(), txtDireccion.getText(), txtContacto.getText(),
+                    txtTelefono.getText(), txtAnexo.getText(), txtCelular.getText(), txtCorreo.getText(), txtWeb.getText());
+            proveedoresList = p.getAll(); //obtener toda la lista de registros de la base de datos
             tbl.setItems(proveedoresList);
             tbl.refresh();
-            this.disableField();
-            addOn = false;
+            if (p.getFilasAfectadas() > 0) {
+                this.disableField();
+                addOn = false;
+            }
         }
 
         if (updateOn) {
@@ -208,27 +206,19 @@ public class ProveedoresController implements Initializable {
             selectedIndex = tbl.getSelectionModel().getSelectedIndex();
             if (selectedIndex >= 0) {
                 Proveedor p = new Proveedor();
-                int id = tbl.getItems().get(selectedIndex).getId();
-
-                String razonSocial = txtRazonSocial.getText();
-                long ruc = Long.parseLong(txtRuc.getText());
-                String direccion = txtDireccion.getText();
-                String telefono = txtTelefono.getText();
-                int anexo = Integer.parseInt(txtAnexo.getText());
-                String celular = txtCelular.getText();
-                String contacto = txtContacto.getText();
-                String correo = txtCorreo.getText();;
-                String web = txtWeb.getText();;
-
-                p.update(id, razonSocial, ruc, direccion, telefono, anexo, celular, contacto, correo, web);
-                proveedoresList = p.getProveedor(); //obtener toda la lista de registros de la base de datos
+                int id = tbl.getItems().get(selectedIndex).getIdProveedor();
+                p.update(id, txtRazonSocial.getText(), txtRuc.getText(), txtDireccion.getText(), txtContacto.getText(),
+                        txtTelefono.getText(), txtAnexo.getText(), txtCelular.getText(), txtCorreo.getText(), txtWeb.getText());
+                proveedoresList = p.getAll(); //obtener toda la lista de registros de la base de datos
                 tbl.setItems(proveedoresList);
                 tbl.refresh();
-                this.disableField();
-                updateOn = false;
+                if (p.getFilasAfectadas() > 0) {
+                    this.disableField();
+                    updateOn = false;
+                }
             } else {
                 // Nothing selected.
-                System.out.println("No se ha seleccionado nada");
+                Alerta.info("Debe seleccionar la fila que desea actualizar");
                 this.disableField();
                 updateOn = false;
             }
@@ -237,8 +227,14 @@ public class ProveedoresController implements Initializable {
 
     @FXML
     private void clic_btnEditar(ActionEvent event) {
-        this.enableField();//habilitando campos
-        updateOn = true;
+        selectedIndex = tbl.getSelectionModel().getSelectedIndex();
+        if (selectedIndex >= 0) {
+            this.enableField();//habilitando campos
+            updateOn = true;
+            addOn = false;
+        } else {
+            Alerta.info("Debe seleccionar la fila que desea actualizar");
+        }
     }
 
     @FXML
@@ -247,13 +243,14 @@ public class ProveedoresController implements Initializable {
 
     @FXML
     private void clic_btnBuscar(ActionEvent event) {
-
         String filtro = txtBuscar.getText();
         Proveedor p = new Proveedor();
         proveedoresList = p.search(filtro);
         tbl.setItems(proveedoresList);
         tbl.refresh();
         this.disableField();
+        addOn = false;
+        updateOn = false;
     }
 
     @FXML
@@ -264,6 +261,8 @@ public class ProveedoresController implements Initializable {
         tbl.setItems(proveedoresList);
         tbl.refresh();
         this.disableField();
+        addOn = false;
+        updateOn = false;
     }
 
     @FXML
@@ -273,17 +272,19 @@ public class ProveedoresController implements Initializable {
         if (p == null) {
             System.out.println("No se seleccionó nada");
         } else {
-            txtId.setText(p.getId() + "");
+            txtId.setText(p.getIdProveedor() + "");
             txtRazonSocial.setText(p.getRazonSocial());
-            txtRuc.setText(p.getRuc() + "");
+            txtRuc.setText(p.getRuc());
             txtDireccion.setText(p.getDireccion());
-            txtTelefono.setText(p.getTelefono());
-            txtAnexo.setText(p.getAnexo() + "");
-            txtCelular.setText(p.getCelular());
             txtContacto.setText(p.getContacto());
+            txtTelefono.setText(p.getTelefono());
+            txtAnexo.setText(p.getAnexo());
+            txtCelular.setText(p.getCelular());
             txtCorreo.setText(p.getCorreo());
             txtWeb.setText(p.getWeb());
         }
+        addOn = false;
+        updateOn = false;
     }
 
     @FXML
@@ -293,17 +294,18 @@ public class ProveedoresController implements Initializable {
         if (p == null) {
             System.out.println("No se seleccionó nada");
         } else {
-            txtId.setText(p.getId() + "");
+            txtId.setText(p.getIdProveedor() + "");
             txtRazonSocial.setText(p.getRazonSocial());
-            txtRuc.setText(p.getRuc() + "");
+            txtRuc.setText(p.getRuc());
             txtDireccion.setText(p.getDireccion());
-            txtTelefono.setText(p.getTelefono());
-            txtAnexo.setText(p.getAnexo() + "");
-            txtCelular.setText(p.getCelular());
             txtContacto.setText(p.getContacto());
+            txtTelefono.setText(p.getTelefono());
+            txtAnexo.setText(p.getAnexo());
+            txtCelular.setText(p.getCelular());
             txtCorreo.setText(p.getCorreo());
             txtWeb.setText(p.getWeb());
         }
+        addOn = false;
+        updateOn = false;
     }
-
 }

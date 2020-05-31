@@ -5,19 +5,11 @@
  */
 package com.jopo.jesoft.model;
 
-import com.jopo.jesoft.conexion.ServiciosMarcas;
 import com.jopo.jesoft.conexion.ServiciosProductos;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.image.Image;
 
 /**
  *
@@ -29,24 +21,19 @@ public class Producto {
 
     }
 
-    public Producto(int id, String codigo, String descripcion, String marca, String web, String unidad, Image imagen, double precioCompra, double precioVenta) {
-        this.id = id;
+    public Producto(String codigo, String descripcion, String web, String imagen, String unidad,
+            String marca, String tipoProducto, double precioCompra, double precioVenta, String moneda, int idProducto) {
         this.codigo = codigo;
         this.descripcion = descripcion;
-        this.marca = marca;
         this.web = web;
-        this.unidad = unidad;
         this.imagen = imagen;
+        this.unidad = unidad;
+        this.marca = marca;
+        this.tipoProducto = tipoProducto;
         this.precioCompra = precioCompra;
         this.precioVenta = precioVenta;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        this.moneda = moneda;
+        this.idProducto = idProducto;
     }
 
     public String getCodigo() {
@@ -65,20 +52,20 @@ public class Producto {
         this.descripcion = descripcion;
     }
 
-    public String getMarca() {
-        return marca;
-    }
-
-    public void setMarca(String marca) {
-        this.marca = marca;
-    }
-
     public String getWeb() {
         return web;
     }
 
     public void setWeb(String web) {
         this.web = web;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
     }
 
     public String getUnidad() {
@@ -89,20 +76,20 @@ public class Producto {
         this.unidad = unidad;
     }
 
-    public FileInputStream getFs() {
-        return fs;
+    public String getMarca() {
+        return marca;
     }
 
-    public void setFs(FileInputStream fs) {
-        this.fs = fs;
+    public void setMarca(String marca) {
+        this.marca = marca;
     }
 
-    public File getFile() {
-        return file;
+    public String getTipoProducto() {
+        return tipoProducto;
     }
 
-    public void setFile(File file) {
-        this.file = file;
+    public void setTipoProducto(String tipoProducto) {
+        this.tipoProducto = tipoProducto;
     }
 
     public double getPrecioCompra() {
@@ -121,20 +108,20 @@ public class Producto {
         this.precioVenta = precioVenta;
     }
 
-    public Image getImagen() {
-        return imagen;
+    public String getMoneda() {
+        return moneda;
     }
 
-    public void setImagen(Image imagen) {
-        this.imagen = imagen;
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
     }
 
-    public Image getFoto() {
-        return foto;
+    public int getIdProducto() {
+        return idProducto;
     }
 
-    public void setFoto(Image foto) {
-        this.foto = foto;
+    public void setIdProducto(int idProducto) {
+        this.idProducto = idProducto;
     }
 
     public ObservableList getObs() {
@@ -149,11 +136,19 @@ public class Producto {
         return filasAfectadas;
     }
 
+    public void setFilasAfectadas(int filasAfectadas) {
+        this.filasAfectadas = filasAfectadas;
+    }
+
     public int getTotalFilas() {
         return totalFilas;
     }
 
-    public ObservableList<Producto> getProductos() {
+    public void setTotalFilas(int totalFilas) {
+        this.totalFilas = totalFilas;
+    }
+
+    public ObservableList<Producto> getAll() {
         totalFilas = 0;
         obs = FXCollections.observableArrayList();
         ServiciosProductos s = new ServiciosProductos();
@@ -161,34 +156,38 @@ public class Producto {
         if (rs != null) {
             try {
                 while (rs.next()) {
-                    id = rs.getInt(1);
+                    idProducto = rs.getInt(1);
                     codigo = rs.getString(2);
                     descripcion = rs.getString(3);
-                    marca = rs.getString(4);
-                    web = rs.getString(5);
+                    web = rs.getString(4);
+                    imagen = rs.getString(5);
                     unidad = rs.getString(6);
-                    InputStream is = rs.getBinaryStream(7);
-                    if (is != null) {
-                        file = new File("photo.png"); //crea un archivo .png
-                        OutputStream os = new FileOutputStream(file);
-                        byte[] contents = new byte[1024]; //crea un array de 1024 bytes
-                        int size = 0;//inicializa el tamaño en cero
-                        while ((size = is.read(contents)) != -1) {
-                            os.write(contents, 0, size);
-                        }
-                        imagen = new Image("file:photo.png");
-                    } else {
-                        String path = "/images/producto-sin-imagen.png";
-                        imagen = new Image(path);
-                    }
-                    precioCompra = rs.getDouble(8);
-                    precioVenta = rs.getDouble(9);
-                    Producto p = new Producto(id, codigo, descripcion, marca, web, unidad, imagen, precioCompra, precioVenta);
+                    marca = rs.getString(7);
+                    tipoProducto = rs.getString(8);
+                    precioCompra = rs.getDouble(9);
+                    precioVenta = rs.getDouble(10);
+                    moneda = rs.getString(11);
+
+//                    InputStream is = rs.getBinaryStream(7);
+//                    if (is != null) {
+//                        file = new File("photo.png"); //crea un archivo .png
+//                        OutputStream os = new FileOutputStream(file);
+//                        byte[] contents = new byte[1024]; //crea un array de 1024 bytes
+//                        int size = 0;//inicializa el tamaño en cero
+//                        while ((size = is.read(contents)) != -1) {
+//                            os.write(contents, 0, size);
+//                        }
+//                        imagen = new Image("file:photo.png");
+//                    } else {
+//                        String path = "/images/producto-sin-imagen.png";
+//                        imagen = new Image(path);
+//                    }
+                    Producto p = new Producto(codigo, descripcion, web, imagen, unidad, marca, tipoProducto, precioCompra, precioVenta, moneda, idProducto);
                     obs.add(p);
                     totalFilas++;
                 }
-                s.close();
-            } catch (IOException | SQLException ex) {
+                // s.close();
+            } catch (SQLException ex) {
                 Alerta.error("" + ex);
             }
         }
@@ -206,91 +205,102 @@ public class Producto {
         } catch (Exception ex) {
             Alerta.info("Eliminación fallida");
         }
-        s.close();
+        //s.close();
     }
 
-    public void insert(String codigo, String descripcion, String marca, String web, String unidad, FileInputStream imagen, double precioCompra, double precioVenta) {
+    public void insert(String codigo, String descripcion, String web, String imagen, String unidad,
+            String marca, String tipoProducto, double precioCompra, double precioVenta, String moneda) {
 
         ServiciosProductos s = new ServiciosProductos();
         filasAfectadas = 0;
         try {
-            filasAfectadas = s.insert(codigo, descripcion, marca, web, unidad, imagen, precioCompra, precioVenta);
-            if (filasAfectadas >= 1) {
-                Alerta.info("La marca se añadió correctamente");
-            }
+            filasAfectadas = s.insert(codigo, descripcion, web, imagen, unidad, marca, tipoProducto, precioCompra, precioVenta, moneda);
+//            if (filasAfectadas >= 1) {
+//                Alerta.info("La marca se añadió correctamente");
+//            }
         } catch (Exception ex) {
             Alerta.info("" + ex);
         }
-        s.close();
+        //s.close();
     }
 
-    public void update(int id, String codigo, String descripcion, String marca, String web, String unidad, FileInputStream imagen, double precioCompra, double precioVenta) {
+    public void update(int idProducto, String codigo, String descripcion, String web, String imagen, String unidad,
+            String marca, String tipoProducto, double precioCompra, double precioVenta, String moneda) {
 
         filasAfectadas = 0;
         ServiciosProductos s = new ServiciosProductos();
         try {
-            filasAfectadas = s.update(id, codigo, descripcion, marca, web, unidad, imagen, precioCompra, precioVenta);
+            filasAfectadas = s.update(idProducto, codigo, descripcion, web, imagen, unidad, marca, tipoProducto, precioCompra, precioVenta, moneda);
             if (filasAfectadas >= 1) {
                 Alerta.info("La marca se actualizó correctamente");
             }
         } catch (Exception ex) {
             Alerta.info("" + ex);
         }
-        s.close();
+        //s.close();
     }
 
     public ObservableList<Producto> search(String filtro) {
         totalFilas = 0;
         obs = FXCollections.observableArrayList();
         ServiciosProductos s = new ServiciosProductos();
-        ResultSet rs = s.search(filtro);
-        try {
-            while (rs.next()) {
-                id = rs.getInt(1);
-                codigo = rs.getString(2);
-                descripcion = rs.getString(3);
-                marca = rs.getString(4);
-                web = rs.getString(5);
-                unidad = rs.getString(6);
-                InputStream is = rs.getBinaryStream(7);
-                if (is != null) {
-                    file = new File("photo.png"); //crea un archivo .png
-                    OutputStream os = new FileOutputStream(file);
-                    byte[] contents = new byte[1024]; //crea un array de 1024 bytes
-                    int size = 0;//inicializa el tamaño en cero
-                    while ((size = is.read(contents)) != -1) {
-                        os.write(contents, 0, size);
-                    }
-                    imagen = new Image("file:photo.png");
-                } else {
-                    String path = "/images/producto-sin-imagen.png";
-                    imagen = new Image(path);
+        ResultSet rs = s.search(descripcion);
+        if (rs != null) {
+            try {
+                while (rs.next()) {
+                    idProducto = rs.getInt(1);
+                    codigo = rs.getString(2);
+                    descripcion = rs.getString(3);
+                    web = rs.getString(4);
+                    imagen = rs.getString(5);
+                    unidad = rs.getString(6);
+                    marca = rs.getString(7);
+                    tipoProducto = rs.getString(8);
+                    precioCompra = rs.getDouble(9);
+                    precioVenta = rs.getDouble(10);
+                    moneda = rs.getString(11);
+
+//                    InputStream is = rs.getBinaryStream(7);
+//                    if (is != null) {
+//                        file = new File("photo.png"); //crea un archivo .png
+//                        OutputStream os = new FileOutputStream(file);
+//                        byte[] contents = new byte[1024]; //crea un array de 1024 bytes
+//                        int size = 0;//inicializa el tamaño en cero
+//                        while ((size = is.read(contents)) != -1) {
+//                            os.write(contents, 0, size);
+//                        }
+//                        imagen = new Image("file:photo.png");
+//                    } else {
+//                        String path = "/images/producto-sin-imagen.png";
+//                        imagen = new Image(path);
+//                    }
+                    Producto p = new Producto(codigo, descripcion, web, imagen, unidad, marca, tipoProducto, precioCompra, precioVenta, moneda, idProducto);
+                    obs.add(p);
+                    totalFilas++;
                 }
-                precioCompra = rs.getDouble(8);
-                precioVenta = rs.getDouble(9);
-                Producto p = new Producto(id, codigo, descripcion, marca, web, unidad, imagen, precioCompra, precioVenta);
-                obs.add(p);
-                totalFilas++;
+                // s.close();
+            } catch (SQLException ex) {
+                Alerta.error("" + ex);
             }
-            s.close();
-        } catch (IOException | SQLException ex) {
-            Alerta.info("" + ex);
         }
         return obs;
     }
 
-    private int id;
     private String codigo;
     private String descripcion;
-    private String marca;
     private String web;
+    private String imagen;
     private String unidad;
-    private FileInputStream fs;
-    private File file;
+    private String marca;
+    private String tipoProducto;
     private double precioCompra;
     private double precioVenta;
-    private Image imagen;
-    private Image foto;
+    private String moneda;
+    private int idProducto;
+
+//    private FileInputStream fs;
+//    private File file;
+//    private Image foto;
     private ObservableList obs;
     private int filasAfectadas;
     private int totalFilas;

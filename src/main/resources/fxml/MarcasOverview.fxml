@@ -95,7 +95,6 @@
               <columnConstraints>
                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                 <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="350.0" />
-                  <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="126.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="25.0" valignment="CENTER" />
@@ -104,18 +103,12 @@
                <children>
                   <Label alignment="CENTER" contentDisplay="CENTER" text="Id" textFill="WHITE" />
                   <Label alignment="CENTER" contentDisplay="CENTER" text="Marca" textFill="WHITE" GridPane.columnIndex="1" />
-                  <Label alignment="CENTER" contentDisplay="CENTER" text="Abreviatura" textFill="WHITE" GridPane.columnIndex="2" />
                   <TextField fx:id="txtId" alignment="CENTER" editable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="5.0" right="5.0" />
                      </GridPane.margin>
                   </TextField>
-                  <TextField fx:id="txtMarca" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets left="5.0" right="5.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <TextField fx:id="txtAbrev" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="50.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                  <TextField fx:id="txtMarca" alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="31.0" prefWidth="576.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets left="5.0" right="5.0" />
                      </GridPane.margin>
@@ -133,7 +126,6 @@
               <columns>
                 <TableColumn fx:id="colId" prefWidth="100.0" text="Id" />
                 <TableColumn fx:id="colMarca" prefWidth="350.0" text="Marcas" />
-                  <TableColumn fx:id="colAbrev" prefWidth="126.0" text="Abreviatura" />
               </columns>
             </TableView>
          </children>

@@ -6,20 +6,19 @@
 package com.jopo.jesoft.controller;
 
 import com.jopo.jesoft.model.Alerta;
+import com.jopo.jesoft.model.Crawler;
 import com.jopo.jesoft.model.Marca;
+import com.jopo.jesoft.model.Moneda;
 import com.jopo.jesoft.model.Producto;
+import com.jopo.jesoft.model.TipoProducto;
 import com.jopo.jesoft.model.Unidad;
 import java.awt.Desktop;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -33,6 +32,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.web.WebEngine;
@@ -65,7 +65,6 @@ public class ProductosController implements Initializable {
     private TableView<Producto> tbl;
     @FXML
     private TableColumn colId;
-    @FXML
     private ImageView img;
     @FXML
     private TableColumn colCodigo;
@@ -85,15 +84,28 @@ public class ProductosController implements Initializable {
     private TableColumn colPrecioVenta;
     @FXML
     private WebView webView;
-
+    @FXML
+    private ComboBox<String> cbTipoProducto;
+    @FXML
+    private ComboBox<String> cbMoneda;
     private ObservableList<Producto> productosList;
     private ObservableList<String> marcasList;
     private ObservableList<String> unidadesList;
+    private ObservableList<String> tipoProductosList;
+    private ObservableList<String> monedasList;
     private boolean updateOn = false;
     private boolean addOn = false;
     private int selectedIndex;
     private File imgFile;
     private TextField txtPrecio;
+    @FXML
+    private TextField txtImagen;
+    @FXML
+    private WebView webImagen;
+    @FXML
+    private Button btnEliminar;
+    @FXML
+    private Button btnEditar;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -101,7 +113,9 @@ public class ProductosController implements Initializable {
         productosList = FXCollections.observableArrayList();
         marcasList = FXCollections.observableArrayList();
         unidadesList = FXCollections.observableArrayList();
-        this.colId.setCellValueFactory(new PropertyValueFactory("id"));
+        tipoProductosList = FXCollections.observableArrayList();
+        monedasList = FXCollections.observableArrayList();
+        this.colId.setCellValueFactory(new PropertyValueFactory("idProducto"));
         this.colCodigo.setCellValueFactory(new PropertyValueFactory("codigo"));
         this.colDescripcion.setCellValueFactory(new PropertyValueFactory("descripcion"));
         this.colMarca.setCellValueFactory(new PropertyValueFactory("marca"));
@@ -110,7 +124,7 @@ public class ProductosController implements Initializable {
         this.colPrecioVenta.setCellValueFactory(new PropertyValueFactory("precioVenta"));
 
         Producto p = new Producto();
-        productosList = p.getProductos();
+        productosList = p.getAll();
         tbl.setItems(productosList);
         Marca m = new Marca();
         marcasList = m.getListNombres();
@@ -119,6 +133,18 @@ public class ProductosController implements Initializable {
         Unidad u = new Unidad();
         unidadesList = u.getListNombres();
         cbUnidad.setItems(unidadesList);
+        // cbMarca.getItems() para leer items
+        this.disableField();
+
+        TipoProducto tp = new TipoProducto();
+        tipoProductosList = tp.getListNombres();
+        cbTipoProducto.setItems(tipoProductosList);
+        // cbMarca.getItems() para leer items
+        this.disableField();
+
+        Moneda moneda = new Moneda();
+        monedasList = moneda.getListNombres();
+        cbMoneda.setItems(monedasList);
         // cbMarca.getItems() para leer items
         this.disableField();
     }
@@ -140,9 +166,28 @@ public class ProductosController implements Initializable {
         txtWeb.setDisable(false);
         txtPrecioCompra.setDisable(false);
         txtPrecioVenta.setDisable(false);
+        txtImagen.setDisable(false);
         btnGuardar.setDisable(false);
         cbMarca.setDisable(false);
         cbUnidad.setDisable(false);
+        cbTipoProducto.setDisable(false);
+        cbMoneda.setDisable(false);
+    }
+
+    public void enableFieldGuardar() {
+
+        txtId.setDisable(true);
+        txtCodigo.setDisable(false);
+        txtDescripcion.setDisable(true);
+        txtWeb.setDisable(true);
+        txtPrecioCompra.setDisable(true);
+        txtPrecioVenta.setDisable(false);
+        txtImagen.setDisable(false);
+        btnGuardar.setDisable(false);
+        cbMarca.setDisable(true);
+        cbUnidad.setDisable(true);
+        cbTipoProducto.setDisable(true);
+        cbMoneda.setDisable(true);
     }
 
     public void disableField() {
@@ -152,9 +197,51 @@ public class ProductosController implements Initializable {
         txtWeb.setDisable(true);
         txtPrecioCompra.setDisable(true);
         txtPrecioVenta.setDisable(true);
+        txtImagen.setDisable(true);
         btnGuardar.setDisable(true);
         cbMarca.setDisable(true);
         cbUnidad.setDisable(true);
+        cbTipoProducto.setDisable(true);
+        cbMoneda.setDisable(true);
+        btnEditar.setDisable(true);
+    }
+
+    public void guardar() {
+        if (addOn) {
+            try {
+                Producto p = new Producto();
+                String codigo = txtCodigo.getText();
+                //String marca = cbMarca.getValue(); //devuelve el valor seleccionado en el combobox
+                String marca = "Siemens"; //devuelve el valor seleccionado en el combobox
+                //String web = txtWeb.getText(); //usar esta opcion cuando se use otra marca
+                String web = "https://mall.industry.siemens.com/mall/es/pe/Catalog/Product/" + codigo;
+                //String web = "https://www.se.com/pe/es/product/" + codigo;
+                String descripcion = (new Crawler().listText(web));
+                //String unidad = cbUnidad.getValue();
+                String unidad = "und";
+                //String imagen = txtImagen.getText();
+                String imagen = (new Crawler().listMediaLinksJpg(web));
+                //String tipoProducto = cbTipoProducto.getValue();
+                String tipoProducto = "MATERIALES";
+                //String moneda = cbMoneda.getValue();
+                String moneda = "S/.";
+                double precioVenta = Double.parseDouble(txtPrecioVenta.getText());
+                double precioCompra = precioVenta * 0.6;
+                //double precioCompra = Double.parseDouble(txtPrecioCompra.getText());
+                p.insert(codigo, descripcion, web, imagen, unidad, marca, tipoProducto, precioCompra, precioVenta, moneda);
+
+                productosList = p.getAll(); //obtener toda la lista de registros de la base de datos
+                tbl.setItems(productosList);
+                tbl.refresh();
+                if (p.getFilasAfectadas() > 0) {
+                    this.disableField();
+                    addOn = false;
+                }
+            } catch (IOException ex) {
+                Alerta.error("" + ex);
+            }
+        }
+
     }
 
     @FXML
@@ -176,7 +263,7 @@ public class ProductosController implements Initializable {
     @FXML
     private void clic_btnAgregar(ActionEvent event) {
         this.clearField();//limpiando campos
-        this.enableField();//habilitando campos
+        this.enableFieldGuardar();//habilitando campos
         addOn = true;
         updateOn = false;
     }
@@ -185,12 +272,12 @@ public class ProductosController implements Initializable {
     private void clic_btnEliminar(ActionEvent event) {
         selectedIndex = tbl.getSelectionModel().getSelectedIndex();
         if (selectedIndex >= 0) {
-            int id = tbl.getItems().get(selectedIndex).getId();
+            int id = tbl.getItems().get(selectedIndex).getIdProducto();
             Producto p = new Producto();
             Boolean opcion = Alerta.confirm("¿Deseas eliminar el registro?");
             if (opcion) {
                 p.delete(id);
-                productosList = p.getProductos(); //obtener toda la lista de registros de la base de datos
+                productosList = p.getAll(); //obtener toda la lista de registros de la base de datos
                 tbl.setItems(productosList);
                 tbl.refresh();
             }
@@ -203,32 +290,7 @@ public class ProductosController implements Initializable {
 
     @FXML
     private void clic_btnGuardar(ActionEvent event) {
-        if (addOn) {
-            Producto p = new Producto();
-            String codigo = txtCodigo.getText();
-            String descripcion = txtDescripcion.getText();
-            String nombreMarca = cbMarca.getValue(); //devuelve el valor seleccionado en el combobox
-            String web = txtWeb.getText();
-            String unidad = cbUnidad.getValue();
-            FileInputStream fs;
-            try {
-                fs = new FileInputStream(imgFile);
-                double precioCompra = Double.parseDouble(txtPrecioCompra.getText());
-                double precioVenta = Double.parseDouble(txtPrecioVenta.getText());
-                p.insert(codigo, descripcion, nombreMarca, web, unidad, fs, precioCompra, precioVenta);
-            } catch (FileNotFoundException ex) {
-                Alerta.info("" + ex);
-            }
-
-            productosList = p.getProductos(); //obtener toda la lista de registros de la base de datos
-            tbl.setItems(productosList);
-            tbl.refresh();
-            if (p.getFilasAfectadas() > 0) {
-                this.disableField();
-                addOn = false;
-            }
-        }
-
+        this.guardar();
         if (updateOn) {
 
             selectedIndex = tbl.getSelectionModel().getSelectedIndex();
@@ -237,22 +299,27 @@ public class ProductosController implements Initializable {
                 int id = Integer.parseInt(txtId.getText());
                 String codigo = txtCodigo.getText();
                 String descripcion = txtDescripcion.getText();
-                String nombreMarca = cbMarca.getValue();
+                String marca = cbMarca.getValue(); //devuelve el valor seleccionado en el combobox
                 String web = txtWeb.getText();
                 String unidad = cbUnidad.getValue();
-                Image image= img.getImage();
-                
-                FileInputStream fs;
-                try {
-                    fs = new FileInputStream(imgFile);
-                    double precioCompra = Double.parseDouble(txtPrecioCompra.getText());
-                    double precioVenta = Double.parseDouble(txtPrecioVenta.getText());
-                    p.update(id, codigo, descripcion, nombreMarca, web, unidad, fs, precioCompra, precioVenta);
+                String imagen = txtImagen.getText();
+                String tipoProducto = cbTipoProducto.getValue();
+                String moneda = cbMoneda.getValue();
+                double precioCompra = Double.parseDouble(txtPrecioCompra.getText());
+                double precioVenta = Double.parseDouble(txtPrecioVenta.getText());
 
-                } catch (FileNotFoundException ex) {
-
-                }
-                productosList = p.getProductos(); //obtener toda la lista de registros de la base de datos
+//                FileInputStream fs;
+//                try {
+//                    fs = new FileInputStream(imgFile);
+//                    double precioCompra = Double.parseDouble(txtPrecioCompra.getText());
+//                    double precioVenta = Double.parseDouble(txtPrecioVenta.getText());
+//                    p.update(id, codigo, descripcion, nombreMarca, web, unidad, precioCompra, precioVenta);
+//
+//                } catch (FileNotFoundException ex) {
+//
+//                }
+                p.update(id, codigo, descripcion, web, imagen, unidad, marca, tipoProducto, precioCompra, precioVenta, moneda);
+                productosList = p.getAll(); //obtener toda la lista de registros de la base de datos
                 tbl.setItems(productosList);
                 tbl.refresh();
                 if (p.getFilasAfectadas() > 0) {
@@ -282,6 +349,10 @@ public class ProductosController implements Initializable {
 
     @FXML
     private void key_txtDescripcion(KeyEvent event) {
+
+        if (event.getCode() == KeyCode.ENTER) {
+            this.guardar();
+        }
     }
 
     @FXML
@@ -324,17 +395,21 @@ public class ProductosController implements Initializable {
         if (p == null) {
             System.out.println("No se seleccionó nada");
         } else {
-            txtId.setText(p.getId() + "");
+            txtId.setText(p.getIdProducto() + "");
             txtCodigo.setText(p.getCodigo());
             txtDescripcion.setText(p.getDescripcion());
             txtWeb.setText(p.getWeb());
             txtPrecioCompra.setText(p.getPrecioCompra() + "");
             txtPrecioVenta.setText(p.getPrecioVenta() + "");
-            img.setImage(p.getImagen());
+            txtImagen.setText(p.getImagen());
             cbMarca.getSelectionModel().select(p.getMarca());
             cbUnidad.getSelectionModel().select(p.getUnidad());
+
             WebEngine webEngine = webView.getEngine();
             webEngine.load(p.getWeb());
+
+            WebEngine webEngine2 = webImagen.getEngine();
+            webEngine2.load(p.getImagen());
 
         }
     }
@@ -346,22 +421,23 @@ public class ProductosController implements Initializable {
         if (p == null) {
             System.out.println("No se seleccionó nada");
         } else {
-            txtId.setText(p.getId() + "");
+            txtId.setText(p.getIdProducto() + "");
             txtCodigo.setText(p.getCodigo());
             txtDescripcion.setText(p.getDescripcion());
             txtWeb.setText(p.getWeb());
             txtPrecioCompra.setText(p.getPrecioCompra() + "");
             txtPrecioVenta.setText(p.getPrecioVenta() + "");
+            txtImagen.setText(p.getImagen());
             cbMarca.getSelectionModel().select(p.getMarca());
             cbUnidad.getSelectionModel().select(p.getUnidad());
-            img.setImage(p.getImagen());
+
             WebEngine webEngine = webView.getEngine();
             webEngine.load(p.getWeb());
-
+            WebEngine webEngine2 = webImagen.getEngine();
+            webEngine2.load(p.getImagen());
         }
     }
 
-    @FXML
     private void clic_img(MouseEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Buscar Imagen");
@@ -424,5 +500,13 @@ public class ProductosController implements Initializable {
         } catch (URISyntaxException | IOException ex) {
             Alerta.info("" + ex);
         }
+    }
+
+    @FXML
+    private void clic_cbTipoProducto(ActionEvent event) {
+    }
+
+    @FXML
+    private void clic_cbMoneda(ActionEvent event) {
     }
 }

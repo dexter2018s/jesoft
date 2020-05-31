@@ -1,83 +1,127 @@
 package com.jopo.jesoft.conexion;
 
+import com.jopo.jesoft.model.Alerta;
 import java.sql.*;
 
-public class ServiciosProveedores {
+public class ServiciosProveedores{
 
-//establecer conexion con base de datos SQL SERVER
-    public static Connection conexionAPP() throws Exception {
-        String url = "jdbc:sqlserver://192.168.1.7:1433; databaseName=memeseg";
-        String user = "sa";
-        String password = "corel2duo";
-        return DriverManager.getConnection(url, user, password);
+//solicitar todos los registros de una tabla
+    public ResultSet all() {
+        sql = "SELECT * FROM PROVEEDORES  ORDER BY idProveedor;";
+        cn = Servicio.getConnection();
+        if (cn != null) {
+            try {
+                PreparedStatement pst = cn.prepareStatement(sql);
+                rs = pst.executeQuery();
+            } catch (SQLException ex) {
+                Alerta.error("" + ex);
+            }
+        }
+        return rs;
     }
 
 //solicitar todos los registros de una tabla
-    public ResultSet all() throws Exception {
-        sql = "SELECT * FROM Proveedores";
-        cn = conexionAPP();
-        PreparedStatement pst = cn.prepareStatement(sql);
-        return pst.executeQuery();
+    public ResultSet getRazonesSociales() {
+        sql = "SELECT razonSocial FROM PROVEEDORES;";
+        cn = Servicio.getConnection();
+        if (cn != null) {
+            try {
+                PreparedStatement pst = cn.prepareStatement(sql);
+                rs = pst.executeQuery();
+            } catch (SQLException ex) {
+                Alerta.error("" + ex);
+            }
+        }
+        return rs;
     }
+    //solicitar todos los registros que cumplan el filtro
 
-//solicitar todos los registros que cumplan el filtro de nombre moneda
-    public ResultSet search(String razonSocial) throws Exception {
-        sql = "SELECT * FROM Proveedores WHERE Razon_social LIKE ?;";
-        cn = conexionAPP();
-        PreparedStatement pst = cn.prepareStatement(sql);
-        pst.setString(1, "%" + razonSocial + "%");
-        return pst.executeQuery();
+    public ResultSet search(String razonSocial) {
+        sql = "SELECT * FROM PROVEEDORES WHERE razonSocial LIKE ?;";
+        cn = Servicio.getConnection();
+        if (cn != null) {
+            try {
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setString(1, "%" + razonSocial + "%");
+                rs = pst.executeQuery();
+            } catch (SQLException ex) {
+                Alerta.error("" + ex);
+            }
+        }
+        return rs;
     }
 
 //eliminar un registro mediante su id
-    public void delete(int id) throws Exception {
-        sql = "DELETE FROM Proveedores WHERE Id_proveedor = ?;";
-        cn = conexionAPP();
-        PreparedStatement pst = cn.prepareStatement(sql);
-        pst.setInt(1, id);
-        pst.executeUpdate();
+    public int delete(int id) {
+        filasAfectadas = 0;
+        sql = "DELETE FROM PROVEEDORES WHERE idProveedor = ?;";
+        cn = Servicio.getConnection();
+        if (cn != null) {
+            try {
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setInt(1, id);
+                filasAfectadas = pst.executeUpdate();
+            } catch (SQLException ex) {
+                Alerta.error("" + ex);
+            }
+        }
+        return filasAfectadas;
     }
 
-// añadir un registro tipo Marca
-    public void insert(String razonSocial, long ruc, String direccion, String telefono, int anexo, String celular,String contacto, String correo, String web) throws Exception {
-        sql = "INSERT INTO Proveedores VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?);";
-        cn = conexionAPP();
-        PreparedStatement pst = cn.prepareStatement(sql);
-        pst.setString(1, razonSocial);
-        pst.setLong(2, ruc);
-        pst.setString(3, direccion);
-        pst.setString(4, telefono);
-        pst.setInt(5, anexo);
-        pst.setString(6, celular);
-        pst.setString(7, contacto);
-        pst.setString(8, correo);
-        pst.setString(9, web);
-        pst.executeUpdate();
+// añadir un registro
+    public int insert(String razonSocial, String ruc, String direccion, String contacto, String telefono, String anexo, String celular, String correo, String web) {
+        filasAfectadas = 0;
+        sql = "INSERT INTO PROVEEDORES (razonSocial, ruc, direccion, contacto, telefono, anexo, celular, correo, web) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        cn = Servicio.getConnection();
+        if (cn != null) {
+            try {
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setString(1, razonSocial);
+                pst.setString(2, ruc);
+                pst.setString(3, direccion);
+                pst.setString(4, contacto);
+                pst.setString(5, telefono);
+                pst.setString(6, anexo);
+                pst.setString(7, celular);
+                pst.setString(8, correo);
+                pst.setString(9, web);
+                filasAfectadas = pst.executeUpdate();
+            } catch (SQLException ex) {
+                Alerta.error("" + ex);
+            }
+        }
+        return filasAfectadas;
     }
 
 // editar un registro
-    public void update(int id,String razonSocial, long ruc, String direccion, String telefono, int anexo, String celular,String contacto, String correo, String web) throws Exception {
-        sql = "UPDATE Proveedores SET Razon_social= ?, Ruc= ?, Direccion= ?, Telefono= ?, Anexo=?, Celular= ?, Contacto= ?, Correo= ?, Web=? WHERE Id_proveedor= ?;";
-        cn = conexionAPP();
-        PreparedStatement pst = cn.prepareStatement(sql);
-        pst.setString(1, razonSocial);
-        pst.setLong(2, ruc);
-        pst.setString(3, direccion);
-        pst.setString(4, telefono);
-        pst.setInt(5, anexo);
-        pst.setString(6, celular);
-        pst.setString(7, contacto);
-        pst.setString(8, correo);
-        pst.setString(9, web);
-        pst.setInt(10, id);
-        pst.executeUpdate();
+    public int update(int id, String razonSocial, String ruc, String direccion, String contacto, String telefono, String anexo, String celular, String correo, String web) {
+        filasAfectadas = 0;
+        sql = "UPDATE PROVEEDORES SET razonSocial= ?, ruc= ?, direccion= ?, contacto= ?, telefono= ?, anexo= ?, celular= ?, correo= ?, web= ? WHERE idMarca= ?;";
+        cn = Servicio.getConnection();
+        if (cn != null) {
+            try {
+                PreparedStatement pst = cn.prepareStatement(sql);
+                pst.setString(1, razonSocial);
+                pst.setString(2, ruc);
+                pst.setString(3, direccion);
+                pst.setString(4, contacto);
+                pst.setString(5, telefono);
+                pst.setString(6, anexo);
+                pst.setString(7, celular);
+                pst.setString(8, correo);
+                pst.setString(9, web);
+                pst.setInt(10, id);
+                filasAfectadas = pst.executeUpdate();
+            } catch (SQLException ex) {
+                Alerta.error("" + ex);
+            }
+        }
+        return filasAfectadas;
     }
 
-//cerrar coneccion con la base de datos
-    public void close() throws Exception {
-        cn.close();
-    }
     private Connection cn;
     private String sql;
+    private ResultSet rs;
+    int filasAfectadas = 0;
 
 }

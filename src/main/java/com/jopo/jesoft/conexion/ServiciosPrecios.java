@@ -1,13 +1,25 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package com.jopo.jesoft.conexion;
 
 import com.jopo.jesoft.model.Alerta;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class ServiciosUnidades {
+/**
+ *
+ * @author joelh
+ */
+public class ServiciosPrecios {
 
-//solicitar todos los registros de una tabla
+    //solicitar todos los registros de una tabla
     public ResultSet all() {
-        sql = "SELECT * FROM UNIDADES;";
+        sql = "SELECT * FROM PRECIOS ORDER BY idPrecio;";
         cn = Servicio.getConnection();
         if (cn != null) {
             try {
@@ -21,28 +33,27 @@ public class ServiciosUnidades {
     }
     //solicitar todos los registros de una tabla
 
-    public ResultSet getNombres() {
-        sql = "SELECT idUnidad FROM UNIDADES;";
-        cn = Servicio.getConnection();
-        if (cn != null) {
-            try {
-                PreparedStatement pst = cn.prepareStatement(sql);
-                rs = pst.executeQuery();
-            } catch (SQLException ex) {
-                Alerta.error("" + ex);
-            }
-        }
-        return rs;
-    }
+//    public ResultSet getNombres() {
+//        sql = "SELECT nombre FROM MARCAS;";
+//        cn = Servicio.getConnection();
+//        if (cn != null) {
+//            try {
+//                PreparedStatement pst = cn.prepareStatement(sql);
+//                rs = pst.executeQuery();
+//            } catch (SQLException ex) {
+//                Alerta.error("" + ex);
+//            }
+//        }
+//        return rs;
+//    }
     //solicitar todos los registros que cumplan el filtro
-
-    public ResultSet search(String idUnidad) {
-        sql = "SELECT * FROM UNIDADES WHERE idUnidad LIKE ?;";
+    public ResultSet search(int id) {
+        sql = "SELECT * FROM PRECIOS WHERE nombre LIKE ?;";
         cn = Servicio.getConnection();
         if (cn != null) {
             try {
                 PreparedStatement pst = cn.prepareStatement(sql);
-                pst.setString(1, "%" + idUnidad + "%");
+                pst.setString(1, "%" + id + "%");
                 rs = pst.executeQuery();
             } catch (SQLException ex) {
                 Alerta.error("" + ex);
@@ -52,14 +63,14 @@ public class ServiciosUnidades {
     }
 
 //eliminar un registro mediante su id
-    public int delete(String idUnidad) {
+    public int delete(int id) {
         filasAfectadas = 0;
-        sql = "DELETE FROM UNIDADES WHERE idUnidad = ?;";
+        sql = "DELETE FROM PRECIOS WHERE idMarca = ?;";
         cn = Servicio.getConnection();
         if (cn != null) {
             try {
                 PreparedStatement pst = cn.prepareStatement(sql);
-                pst.setString(1, idUnidad);
+                pst.setInt(1, id);
                 filasAfectadas = pst.executeUpdate();
             } catch (SQLException ex) {
                 Alerta.error("" + ex);
@@ -69,15 +80,18 @@ public class ServiciosUnidades {
     }
 
 // añadir un registro
-    public int insert(String idUnidad, String descripcion) {
+    public int insert(int idProducto, double precioCompra, double precioVenta, double descuento, String simbolo) {
         filasAfectadas = 0;
-        sql = "INSERT INTO UNIDADES (idUnidad, descripcion) VALUES (?,?);";
+        sql = "INSERT INTO PRECIOS (idProducto,precioCompra, precioVenta, descuento, (SELECT * FROM MONEDAS WHERE simbolo = ? )) VALUES (?,?,?,?,?);";
         cn = Servicio.getConnection();
         if (cn != null) {
             try {
                 PreparedStatement pst = cn.prepareStatement(sql);
-                pst.setString(1, idUnidad);
-                pst.setString(2, descripcion);
+                pst.setInt(1, idProducto);
+                pst.setDouble(2, precioCompra);
+                pst.setDouble(3, precioVenta);
+                pst.setDouble(4, descuento);
+                pst.setString(5, simbolo);
                 filasAfectadas = pst.executeUpdate();
             } catch (SQLException ex) {
                 Alerta.error("" + ex);
@@ -87,15 +101,18 @@ public class ServiciosUnidades {
     }
 
 // editar un registro
-    public int update(String idUnidad, String descripcion) {
+    public int update(int idProducto, double precioCompra, double precioVenta, double descuento, String simbolo) {
         filasAfectadas = 0;
-        sql = "UPDATE UNIDADES SET descripcion= ? WHERE idUnidad= ?;";
+        sql = "UPDATE PRECIOS SET nombre= ? WHERE idMarca= ?;";
         cn = Servicio.getConnection();
         if (cn != null) {
             try {
                 PreparedStatement pst = cn.prepareStatement(sql);
-                pst.setString(1, descripcion);
-                pst.setString(2, idUnidad);
+                pst.setDouble(1, precioCompra);
+                pst.setDouble(2, precioVenta);
+                pst.setDouble(3, descuento);
+                pst.setString(4, simbolo);
+                pst.setInt(4, idProducto);
                 filasAfectadas = pst.executeUpdate();
             } catch (SQLException ex) {
                 Alerta.error("" + ex);

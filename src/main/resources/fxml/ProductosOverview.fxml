@@ -7,7 +7,6 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -89,9 +88,9 @@
                         <Button id="btnSiguiente" contentDisplay="TOP" graphicTextGap="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clic_btnSiguiente" stylesheets="@../styles/Formulario.css" text="Siguiente" GridPane.columnIndex="2" />
                         <Button id="btnUltimo" contentDisplay="TOP" graphicTextGap="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clic_btnUltimo" stylesheets="@../styles/Formulario.css" text="Ultimo" GridPane.columnIndex="3" />
                         <Button id="btnAgregar" contentDisplay="TOP" graphicTextGap="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clic_btnAgregar" stylesheets="@../styles/Formulario.css" text="Añadir" GridPane.columnIndex="4" />
-                        <Button id="btnEliminar" contentDisplay="TOP" graphicTextGap="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clic_btnEliminar" stylesheets="@../styles/Formulario.css" text="Eliminar" GridPane.columnIndex="6" />
+                        <Button id="btnEliminar" fx:id="btnEliminar" contentDisplay="TOP" graphicTextGap="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clic_btnEliminar" stylesheets="@../styles/Formulario.css" text="Eliminar" GridPane.columnIndex="6" />
                         <Button id="btnGuardar" fx:id="btnGuardar" contentDisplay="TOP" graphicTextGap="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clic_btnGuardar" stylesheets="@../styles/Formulario.css" text="Guardar" GridPane.columnIndex="7" />
-                        <Button id="btnEditar" contentDisplay="TOP" graphicTextGap="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clic_btnEditar" stylesheets="@../styles/Formulario.css" text="Editar" GridPane.columnIndex="5" />
+                        <Button id="btnEditar" fx:id="btnEditar" contentDisplay="TOP" graphicTextGap="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#clic_btnEditar" stylesheets="@../styles/Formulario.css" text="Editar" GridPane.columnIndex="5" />
                      </children>
                   </GridPane>
                </children>
@@ -114,6 +113,8 @@
                         <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <Label alignment="CENTER" text="Datos de Productos" textFill="WHITE">
@@ -128,31 +129,41 @@
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin></TextField>
-                        <TextField fx:id="txtDescripcion" promptText="Descripcion" GridPane.rowIndex="3">
+                        <TextField fx:id="txtDescripcion" promptText="Descripcion" GridPane.rowIndex="4">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin></TextField>
-                        <TextField fx:id="txtWeb" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Web" GridPane.rowIndex="5">
+                        <TextField fx:id="txtWeb" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Web" GridPane.rowIndex="6">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <TextField fx:id="txtPrecioCompra" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Precio de compra" GridPane.rowIndex="7">
+                        <TextField fx:id="txtPrecioCompra" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Precio de compra" GridPane.rowIndex="8">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <TextField fx:id="txtPrecioVenta" onKeyPressed="#key_txtDescripcion" prefWidth="200.0" promptText="Precio de venta" GridPane.rowIndex="8">
+                        <TextField fx:id="txtPrecioVenta" onKeyReleased="#key_txtDescripcion" prefWidth="200.0" promptText="Precio de venta" GridPane.rowIndex="3">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </TextField>
-                        <ComboBox fx:id="cbMarca" onAction="#clic_cbMarca" prefWidth="320.0" promptText="Marca" GridPane.rowIndex="4">
+                        <ComboBox fx:id="cbMarca" onAction="#clic_cbMarca" prefWidth="320.0" promptText="Marca" GridPane.rowIndex="5">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
                         </ComboBox>
-                        <ComboBox fx:id="cbUnidad" onAction="#clic_cbUnidad" prefWidth="320.0" promptText="Unidad" GridPane.rowIndex="6">
+                        <ComboBox fx:id="cbUnidad" onAction="#clic_cbUnidad" prefWidth="320.0" promptText="Unidad" GridPane.rowIndex="7">
+                           <GridPane.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </GridPane.margin>
+                        </ComboBox>
+                        <ComboBox fx:id="cbTipoProducto" onAction="#clic_cbTipoProducto" prefWidth="320.0" promptText=" Tipo de producto" GridPane.rowIndex="10">
+                           <GridPane.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </GridPane.margin>
+                        </ComboBox>
+                        <ComboBox fx:id="cbMoneda" onAction="#clic_cbMoneda" prefWidth="320.0" promptText="Moneda" GridPane.rowIndex="9">
                            <GridPane.margin>
                               <Insets left="5.0" right="5.0" />
                            </GridPane.margin>
@@ -168,7 +179,8 @@
          <right>
             <VBox prefHeight="680.0" prefWidth="300.0" BorderPane.alignment="CENTER">
                <children>
-                  <ImageView fx:id="img" fitHeight="300.0" fitWidth="300.0" onMouseClicked="#clic_img" pickOnBounds="true" preserveRatio="true" />
+                  <WebView fx:id="webImagen" prefHeight="300.0" prefWidth="300.0" />
+                  <TextField fx:id="txtImagen" />
                   <WebView fx:id="webView" onMouseClicked="#clic_webView" prefHeight="384.0" prefWidth="300.0" />
                </children>
             </VBox>

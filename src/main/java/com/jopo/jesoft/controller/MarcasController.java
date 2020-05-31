@@ -39,27 +39,22 @@ public class MarcasController implements Initializable {
     @FXML
     private TextField txtMarca;
     @FXML
-    private TextField txtAbrev;
-    @FXML
     private TableView<Marca> tblMarcas;
     @FXML
     private TableColumn colId;
     @FXML
     private TableColumn colMarca;
     @FXML
-    private TableColumn colAbrev;
-    @FXML
     private Button btnSearchRegister;
-    private TextField txtSearch;
     @FXML
     private Button btnUpdateRegister;
+    @FXML
+    private TextField txtBuscar;
 
     //variables propias
     private ObservableList<Marca> marcasList;
     private boolean updateOn = false;
     private boolean addOn = false;
-    @FXML
-    private TextField txtBuscar;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -67,7 +62,6 @@ public class MarcasController implements Initializable {
         marcasList = FXCollections.observableArrayList();
         this.colId.setCellValueFactory(new PropertyValueFactory("id"));
         this.colMarca.setCellValueFactory(new PropertyValueFactory("nombre"));
-        this.colAbrev.setCellValueFactory(new PropertyValueFactory("abrev"));
         Marca marcas = new Marca();
         marcasList = marcas.getMarcas();
         tblMarcas.setItems(marcasList);
@@ -105,7 +99,7 @@ public class MarcasController implements Initializable {
 
         if (addOn) {
             Marca marca = new Marca();
-            marca.insert(txtMarca.getText(), txtAbrev.getText());
+            marca.insert(txtMarca.getText());
             marcasList = marca.getMarcas(); //obtener toda la lista de registros de la base de datos
             tblMarcas.setItems(marcasList);
             tblMarcas.refresh();
@@ -121,7 +115,7 @@ public class MarcasController implements Initializable {
             if (selectedIndex >= 0) {
                 Marca marca = new Marca();
                 int id = tblMarcas.getItems().get(selectedIndex).getId();
-                marca.update(id, txtMarca.getText(), txtAbrev.getText());
+                marca.update(id, txtMarca.getText());
                 marcasList = marca.getMarcas(); //obtener toda la lista de registros de la base de datos
                 tblMarcas.setItems(marcasList);
                 tblMarcas.refresh();
@@ -160,7 +154,7 @@ public class MarcasController implements Initializable {
 
     @FXML
     private void clic_btnSearchRegister(ActionEvent event) {
-        String filtro = txtSearch.getText();
+        String filtro = txtBuscar.getText();
         Marca marcas = new Marca();
         marcasList = marcas.search(filtro);
         tblMarcas.setItems(marcasList);
@@ -179,7 +173,6 @@ public class MarcasController implements Initializable {
         } else {
             txtId.setText(m.getId() + "");
             txtMarca.setText(m.getNombre());
-            txtAbrev.setText(m.getAbrev());
         }
         addOn = false;
         updateOn = false;
@@ -188,19 +181,16 @@ public class MarcasController implements Initializable {
     public void clearField() {
         txtId.setText("");
         txtMarca.setText("");
-        txtAbrev.setText("");
     }
 
     public void enableField() {
         txtMarca.setDisable(false);
-        txtAbrev.setDisable(false);
         btnSaveRegister.setDisable(false);
     }
 
     public void disableField() {
         txtId.setDisable(true);
         txtMarca.setDisable(true);
-        txtAbrev.setDisable(true);
         btnSaveRegister.setDisable(true);
     }
 
@@ -241,7 +231,6 @@ public class MarcasController implements Initializable {
         } else {
             txtId.setText(m.getId() + "");
             txtMarca.setText(m.getNombre());
-            txtAbrev.setText(m.getAbrev());
         }
         addOn = false;
         updateOn = false;

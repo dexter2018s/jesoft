@@ -7,6 +7,7 @@ package com.jopo.jesoft.model;
 
 import com.jopo.jesoft.conexion.ServiciosProveedores;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -20,25 +21,25 @@ public class Proveedor {
 
     }
 
-    public Proveedor(int id, String razonSocial, long ruc, String direccion, String telefono, int anexo, String celular, String contacto, String correo, String web) {
-        this.id = id;
+    public Proveedor(int idProveedor, String razonSocial, String ruc, String direccion, String contacto, String telefono, String anexo, String celular, String correo, String web) {
+        this.idProveedor = idProveedor;
         this.razonSocial = razonSocial;
         this.ruc = ruc;
         this.direccion = direccion;
+        this.contacto = contacto;
         this.telefono = telefono;
         this.anexo = anexo;
         this.celular = celular;
-        this.contacto = contacto;
         this.correo = correo;
         this.web = web;
     }
 
-    public int getId() {
-        return id;
+    public int getIdProveedor() {
+        return idProveedor;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdProveedor(int idProveedor) {
+        this.idProveedor = idProveedor;
     }
 
     public String getRazonSocial() {
@@ -49,11 +50,11 @@ public class Proveedor {
         this.razonSocial = razonSocial;
     }
 
-    public long getRuc() {
+    public String getRuc() {
         return ruc;
     }
 
-    public void setRuc(long ruc) {
+    public void setRuc(String ruc) {
         this.ruc = ruc;
     }
 
@@ -65,6 +66,14 @@ public class Proveedor {
         this.direccion = direccion;
     }
 
+    public String getContacto() {
+        return contacto;
+    }
+
+    public void setContacto(String contacto) {
+        this.contacto = contacto;
+    }
+
     public String getTelefono() {
         return telefono;
     }
@@ -73,11 +82,11 @@ public class Proveedor {
         this.telefono = telefono;
     }
 
-    public int getAnexo() {
+    public String getAnexo() {
         return anexo;
     }
 
-    public void setAnexo(int anexo) {
+    public void setAnexo(String anexo) {
         this.anexo = anexo;
     }
 
@@ -87,14 +96,6 @@ public class Proveedor {
 
     public void setCelular(String celular) {
         this.celular = celular;
-    }
-
-    public String getContacto() {
-        return contacto;
-    }
-
-    public void setContacto(String contacto) {
-        this.contacto = contacto;
     }
 
     public String getCorreo() {
@@ -113,6 +114,22 @@ public class Proveedor {
         this.web = web;
     }
 
+    public int getTotalFilas() {
+        return totalFilas;
+    }
+
+    public void setTotalFilas(int totalFilas) {
+        this.totalFilas = totalFilas;
+    }
+
+    public int getFilasAfectadas() {
+        return filasAfectadas;
+    }
+
+    public void setFilasAfectadas(int filasAfectadas) {
+        this.filasAfectadas = filasAfectadas;
+    }
+
     public ObservableList getObs() {
         return obs;
     }
@@ -121,101 +138,119 @@ public class Proveedor {
         this.obs = obs;
     }
 
-    public ObservableList<Proveedor> getProveedor() {
+    public ObservableList<Proveedor> getAll() {
+        totalFilas = 0;
         obs = FXCollections.observableArrayList();
         ServiciosProveedores s = new ServiciosProveedores();
-        try {
-            ResultSet rs = s.all();
-            while (rs.next()) {
-                id = rs.getInt(1);
-                razonSocial = rs.getString(2);
-                ruc = rs.getLong(3);
-                direccion = rs.getString(4);
-                telefono = rs.getString(5);
-                anexo = rs.getInt(6);
-                celular = rs.getString(7);
-                contacto = rs.getString(8);
-                correo = rs.getString(9);
-                web = rs.getString(10);
+        ResultSet rs = s.all();
+        if (rs != null) {
+            try {
+                while (rs.next()) {
+                    idProveedor = rs.getInt(1);
+                    razonSocial = rs.getString(2);
+                    ruc = rs.getString(3);
+                    direccion = rs.getString(4);
+                    contacto = rs.getString(5);
+                    telefono = rs.getString(6);
+                    anexo = rs.getString(7);
+                    celular = rs.getString(8);
+                    correo = rs.getString(9);
+                    web = rs.getString(10);
 
-                Proveedor p = new Proveedor(id, razonSocial, ruc, direccion, telefono, anexo, celular, contacto, correo, web);
-                obs.add(p);
+                    Proveedor p = new Proveedor(idProveedor, razonSocial, ruc, direccion, contacto, telefono, anexo, celular, correo, web);
+                    obs.add(p);
+                    totalFilas++;
+                }
+            } catch (SQLException ex) {
+                Alerta.error("" + ex);
             }
-            s.close();
-        } catch (Exception ex) {
-            System.out.println("BD - " + ex);
         }
+        //s.close();
         return obs;
     }
 
     public void delete(int id) {
         ServiciosProveedores s = new ServiciosProveedores();
+        filasAfectadas = 0;
         try {
-            s.delete(id);//ejecutando delete mediante id
-            //System.out.println("BD-Eliminacion exitosa");
-            s.close();
+            filasAfectadas = s.delete(id);//ejecutando delete mediante id
+            if (filasAfectadas >= 1) {
+                Alerta.info("Eliminación Exitosa");
+            }
         } catch (Exception ex) {
-            System.out.println("BD - Eliminacion fallida:" + ex);
+            Alerta.error("" + ex);
         }
+        //s.close();
     }
 
-    public void insert(String razonSocial, long ruc, String direccion, String telefono, int anexo, String celular, String contacto, String correo, String web) {
+    public void insert(String razonSocial, String ruc, String direccion, String contacto, String telefono, String anexo, String celular, String correo, String web) {
         ServiciosProveedores s = new ServiciosProveedores();
+        filasAfectadas = 0;
         try {
-            s.insert(razonSocial, ruc, direccion, telefono, anexo, celular, contacto, correo, web);//ejecutando delete mediante id
-            //System.out.println("BD-Eliminacion exitosa");
-            s.close();
+            filasAfectadas = s.insert(razonSocial, ruc, direccion, contacto, telefono, anexo, celular, correo, web);//ejecutando delete mediante id
+            if (filasAfectadas >= 1) {
+                Alerta.info("El proveedor se añadió correctamente");
+            }
         } catch (Exception ex) {
-            System.out.println("BD - Insercion fallida:" + ex);
+            Alerta.error("" + ex);
         }
+        //s.close();
     }
 
-    public void update(int id, String razonSocial, long ruc, String direccion, String telefono, int anexo, String celular, String contacto, String correo, String web) {
+    public void update(int idProveedor, String razonSocial, String ruc, String direccion, String contacto, String telefono, String anexo, String celular, String correo, String web) {
+        filasAfectadas = 0;
         ServiciosProveedores s = new ServiciosProveedores();
         try {
-            s.update(id, razonSocial, ruc, direccion, telefono, anexo, celular, contacto, correo, web);//ejecutando delete mediante id
-            //System.out.println("BD-Eliminacion exitosa");
-            s.close();
+            filasAfectadas = s.update(idProveedor, razonSocial, ruc, direccion, contacto, telefono, anexo, celular, correo, web);//ejecutando delete mediante id
+            if (filasAfectadas >= 1) {
+                Alerta.info("El proveedor se actualizó correctamente");
+            }
         } catch (Exception ex) {
-            System.out.println("BD - actualizacion fallida:" + ex);
+            Alerta.error("" + ex);
         }
+        //s.close();
     }
 
     public ObservableList<Proveedor> search(String filtro) {
+        totalFilas = 0;
         obs = FXCollections.observableArrayList();
         ServiciosProveedores s = new ServiciosProveedores();
+        ResultSet rs = s.search(filtro);
         try {
-            ResultSet rs = s.search(filtro);
             while (rs.next()) {
-                id = rs.getInt(1);
+                idProveedor = rs.getInt(1);
                 razonSocial = rs.getString(2);
-                ruc = rs.getLong(3);
+                ruc = rs.getString(3);
                 direccion = rs.getString(4);
-                telefono = rs.getString(5);
-                anexo = rs.getInt(6);
-                celular = rs.getString(7);
-                contacto = rs.getString(8);
+                contacto = rs.getString(5);
+                telefono = rs.getString(6);
+                anexo = rs.getString(7);
+                celular = rs.getString(8);
                 correo = rs.getString(9);
                 web = rs.getString(10);
-                Proveedor p = new Proveedor(id, razonSocial, ruc, direccion, telefono, anexo, celular, contacto, correo, web);
+
+                Proveedor p = new Proveedor(idProveedor, razonSocial, ruc, direccion, contacto, telefono, anexo, celular, correo, web);
                 obs.add(p);
+                totalFilas++;
             }
-            s.close();
-        } catch (Exception ex) {
-            System.out.println("BD - " + ex);
+        } catch (SQLException ex) {
+            Alerta.error("" + ex);
         }
+        //s.close();
         return obs;
     }
 
-    private int id;
+    private int idProveedor;
     private String razonSocial;
-    private long ruc;
+    private String ruc;
     private String direccion;
-    private String telefono;
-    private int anexo;
-    private String celular;
     private String contacto;
+    private String telefono;
+    private String anexo;
+    private String celular;
     private String correo;
     private String web;
+    private int totalFilas;
+    private int filasAfectadas;
     private ObservableList obs;
 }
